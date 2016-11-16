@@ -1,0 +1,58 @@
+$container-background: #ededed
+
+body
+  background-color: #d4d4d4
+
+@media (max-width: 480px)
+  .container
+    padding: 0
+  .page-content
+    margin:
+      left: -15px
+      right: -15px
+
+@media (min-width: 481px)
+  .spacer
+    margin:
+      top: 15px
+
+.navbar-brand
+  margin: 0 7px 0 -7px
+  padding: 5px
+
+.navbar-brand img
+  width: 100px
+  height: 40px
+
+.content
+  background-color: $container-background
+  padding: 15px
+  box-shadow: 0 0 11px -8px #000
+  -webkit-box-shadow: 0 0 11px -5px #000
+
+.content-navigation
+  box-sizing: content-box
+  padding-top: 15px
+  min-height: 500px
+  background-color: $container-background
+  box-shadow: 0 0 11px -8px #000
+  -webkit-box-shadow: 0 0 11px -5px #000
+
+.content-navigation > ol, ul
+  padding-left: 15px
+  list-style-type: none
+
+.content-navigation a
+  color: #333
+
+.post-thumbnail
+  h1, h2, h3, h4, h5, h6
+    margin:
+      top: 0
+      left: 10px
+      bottom: 5px
+
+.row-no-padding
+  [class*="col-"]
+    padding-left: 0
+    padding-right: 0

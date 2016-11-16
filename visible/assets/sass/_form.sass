@@ -1,0 +1,72 @@
+//Message box background colors
+$s1: 35%
+$failure-bg: desaturate(#f99, $s1)
+$success-bg: desaturate(#99ff99, $s1)
+$neutral-bg: desaturate(#9999ff, $s1)
+//Message box text colors
+$d1: 50%
+$failure-text: darken($failure-bg, $d1)
+$success-text: darken($success-bg, $d1)
+$neutral-text: darken($neutral-bg, $d1)
+
+form
+  font-size: 16px
+
+input
+  border: 1px solid darkgrey
+  background-color: #fff
+  font-size: 16px
+
+input[type=checkbox]
+  margin: 4px
+
+input[type=text], input[type=password]
+  //padding: 3px
+  //margin: 3px
+  border-radius: 5px
+  font-size: 16px
+
+label
+  margin-top: 8px
+  font-weight: 100
+  line-height: 1.2
+
+.modal-body
+  box-sizing: content-box
+  background-color: #f9f9f9
+
+.form-body
+  overflow: hidden
+  padding-top: 0
+
+.form-response
+  box-sizing: content-box
+  width: 100%
+  background-color: $neutral-bg
+  font-size: 16px
+  margin: -30px -15px 15px
+
+  padding-top: 15px
+  padding-bottom: 15px
+
+.form-response-status
+  display: inline
+  font-weight: bold
+  font-size: 18px
+
+.form-response:first-letter
+  text-transform: capitalize
+
+.form-response-failure
+  background-color: $failure-bg
+  color: $failure-text
+
+.form-response-success
+  background-color: $success-bg
+  color: $success-text
+
+.loading
+  background:
+    image: url("../img/reload.svg")
+    position: center center
+    repeat: no-repeat

@@ -323,7 +323,7 @@ if (!function_exists('safe_mailto')) {
 
         $output = "<script type=\"text/javascript\">\n"
             . "\t//<![CDATA[\n"
-            . "\tvar l=new Array();\n";
+            . "\tvar l=[];\n";
 
         for ($i = 0, $c = count($x); $i < $c; $i++) {
             $output .= "\tl[" . $i . "] = '" . $x[$i] . "';\n";

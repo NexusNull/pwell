@@ -1,0 +1,179 @@
+body {
+    background-color: #d4d4d4;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0;
+    }
+
+    .page-content {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+}
+
+@media (min-width: 481px) {
+    .spacer {
+        margin-top: 15px;
+    }
+}
+
+.navbar-brand {
+    margin: 0 7px 0 -7px;
+    padding: 5px;
+}
+
+.navbar-brand img {
+    width: 100px;
+    height: 40px;
+}
+
+.content {
+    background-color: #ededed;
+    padding: 15px;
+    box-shadow: 0 0 11px -8px #000;
+    -webkit-box-shadow: 0 0 11px -5px #000;
+}
+
+.content-navigation {
+    box-sizing: content-box;
+    padding-top: 15px;
+    min-height: 500px;
+    background-color: #ededed;
+    box-shadow: 0 0 11px -8px #000;
+    -webkit-box-shadow: 0 0 11px -5px #000;
+}
+
+.content-navigation > ol, ul {
+    padding-left: 15px;
+    list-style-type: none;
+}
+
+.content-navigation a {
+    color: #333;
+}
+
+.post-thumbnail h1, .post-thumbnail h2, .post-thumbnail h3, .post-thumbnail h4, .post-thumbnail h5, .post-thumbnail h6 {
+    margin-top: 0;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.row-no-padding [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+form {
+    font-size: 16px;
+}
+
+input {
+    border: 1px solid darkgrey;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+input[type=checkbox] {
+    margin: 4px;
+}
+
+input[type=text], input[type=password] {
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+label {
+    margin-top: 8px;
+    font-weight: 100;
+    line-height: 1.2;
+}
+
+.modal-body {
+    box-sizing: content-box;
+    background-color: #f9f9f9;
+}
+
+.form-body {
+    overflow: hidden;
+    padding-top: 0;
+}
+
+.form-response {
+    box-sizing: content-box;
+    width: 100%;
+    background-color: #ababed;
+    font-size: 16px;
+    margin: -30px -15px 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.form-response-status {
+    display: inline;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.form-response:first-letter {
+    text-transform: capitalize;
+}
+
+.form-response-failure {
+    background-color: #edabab;
+    color: #7e1b1b;
+}
+
+.form-response-success {
+    background-color: #abedab;
+    color: #1b7e1b;
+}
+
+.loading {
+    background-image: url("../img/reload.svg");
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+@media (max-width: 768px) {
+    .content {
+        font-size: 16px;
+    }
+
+    .post-thumbnail {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 768px) {
+    .content {
+        font-size: 18px;
+    }
+
+    .post-thumbnail {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 992px) {
+    .content {
+        font-size: 20px;
+    }
+
+    .post-thumbnail {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .content {
+        font-size: 20px;
+    }
+
+    .post-thumbnail {
+        font-size: 15px;
+    }
+}
+
+/*# sourceMappingURL=main.css.map */
