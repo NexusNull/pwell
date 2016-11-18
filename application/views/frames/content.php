@@ -5,6 +5,7 @@
  * Date: 10/18/16
  * Time: 9:21 PM
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
 <div class="row spacer" href="http://www.google.de">

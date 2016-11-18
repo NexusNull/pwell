@@ -17,17 +17,17 @@ class Index extends CI_Controller
 
     public function index()
     {
-        $data = array();
-        $data['meta'] = array(
+        $headerData = array();
+        $headerData['meta'] = array(
             "<script src=\"https://www.google.com/recaptcha/api.js?onload=reCaptcha&render=explicit\" async defer></script>"
         );
 
-        $data['style_src'] = array(
+        $headerData['style_src'] = array(
             'assets/css/bootstrap.min.css',
             'assets/css/main.css',
         );
 
-        $data['js_src'] = array(
+        $headerData['js_src'] = array(
             'assets/js/jquery-2.2.0.js',
             'assets/js/jquery-ui.js',
             'assets/js/jquery.sticky.js',
@@ -36,7 +36,12 @@ class Index extends CI_Controller
             'assets/js/controller.js',
             //'assets/js/effect.bubbles.js',
         );
-        $this->load->view('frames/index', $data);
+        $this->load->view('parts/header', $headerData);
+        $this->load->view('parts/navbar');
+        $this->load->view('parts/page-content');
+        $this->load->view('parts/register-modal');
+        $this->load->view('parts/login-modal');
+        $this->load->view('parts/footer');
     }
 
 
