@@ -15,7 +15,7 @@ class Post
     /**
      * @var int image_id
      */
-    private $image_id;
+    private $image_link;
     /**
      * @var string teaser
      */
@@ -45,12 +45,11 @@ class Post
      */
     private $text;
 
-    public function __construct($id, $image_id, $teaser, $date_written, $date_changed, $author, $keywords, $sections, $text)
+    public function __construct($id = NULL, $image_id = NULL, $teaser = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $sections = array(), $text = NULL)
     {
-
         $this->text = $text;
         $this->post_id = $id;
-        $this->image_id = $image_id;
+        $this->image_link = $image_id;
         $this->teaser = $teaser;
         $this->date_written = $date_written;
         $this->date_changed = $date_changed;
@@ -71,9 +70,9 @@ class Post
     /**
      * @return number
      */
-    public function getImageId()
+    public function getImageLink()
     {
-        return $this->image_id;
+        return $this->image_link;
     }
 
     /**
@@ -131,6 +130,4 @@ class Post
     {
         return $this->text;
     }
-
-
 }
