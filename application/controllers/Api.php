@@ -21,7 +21,6 @@
  */
 class Api extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -44,9 +43,6 @@ class Api extends CI_Controller
                 break;
             case "RequestPost":
                 echo $this->requestPost();
-                break;
-            case "RequestThumbnail":
-                echo $this->requestPostThumbnail();
                 break;
             case "LoginInfo":
                 echo $this->loginInfo();
@@ -73,11 +69,6 @@ class Api extends CI_Controller
         $postIds = $this->posts->getLastPostIds();
 
         return (new Response("success", NULL, $postIds))->toString();
-    }
-
-    private function requestPostThumbnail()
-    {
-
     }
 
     private function loginInfo()
@@ -113,7 +104,6 @@ class Api extends CI_Controller
                 'status' => FALSE,
             );
         }
-
         return (new Response("success", "", $data))->toString();
     }
 }

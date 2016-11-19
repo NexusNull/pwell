@@ -51,7 +51,9 @@ class Posts_model extends CI_Model
         $sql = "SELECT id FROM posts ORDER BY date_written DESC LIMIT ?";
         $query = $this->db->query($sql, array($max));
         if ($query->num_rows() > 0) {
-            $result = $query->result_array();
+            foreach ($query->result_array() as $value) {
+                $result[] = (int)$value['id'];
+            }
         }
 
         return $result;

@@ -47,10 +47,10 @@ class Index extends CI_Controller
 
         // TODO : Proper display of default Posts
         foreach ($postsIds as $id) {
-            $this->load->view('template/template-PostThumbnail', array("post" => $this->posts->getPost($id['id'])));
+            $this->load->view('template/template-PostThumbnail', array("post" => $this->posts->getPost($id)));
         }
         foreach ($postsIds as $id) {
-            $this->load->view('template/template-Post', array("post" => $this->posts->getPost($id['id'])));
+            $this->load->view('template/template-Post', array("post" => $this->posts->getPost($id)));
         }
 
         $this->load->view('parts/page-content-end');
