@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * User: patric
  * Date: 6/20/16
  * Time: 8:08 AM
+ * @property Posts_model posts
  */
 class Index extends CI_Controller
 {
@@ -13,6 +14,7 @@ class Index extends CI_Controller
     {
         parent::__construct();
         session_start();
+        $this->load->model("Posts_model", "posts");
     }
 
     public function index()
@@ -36,9 +38,22 @@ class Index extends CI_Controller
             'assets/js/controller.js',
             //'assets/js/effect.bubbles.js',
         );
+
+        $postsIds = $this->posts->getLastPostIds();
+
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
-        $this->load->view('parts/page-content');
+        $this->load->view('parts/page-content-start');
+
+        // TODO : Proper display of default Posts
+        foreach ($postsIds as $id) {
+            $this->load->view('template/template-PostThumbnail', array("post" => $this->posts->getPost($id['id'])));
+        }
+        foreach ($postsIds as $id) {
+            $this->load->view('template/template-Post', array("post" => $this->posts->getPost($id['id'])));
+        }
+
+        $this->load->view('parts/page-content-end');
         $this->load->view('parts/register-modal');
         $this->load->view('parts/login-modal');
         $this->load->view('parts/footer');
