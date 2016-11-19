@@ -24,7 +24,8 @@ pwell.Controller.prototype.checkLoginInfo = function () {
         type: "POST",
         url: "/Api",
         dataType: "json",
-        data: "request=LoginInfo",
+        data: "request=LoginInfo&" +
+        "data={}",
         success: function (response) {
             var data = response.data;
             self.loggedin = data.status;
@@ -65,7 +66,8 @@ pwell.Controller.prototype.logout = function () {
         type: "POST",
         url: "/Api",
         dataType: "json",
-        data: "request=Logout",
+        data: "request=Logout&" +
+        "data={}",
         complete: function () {
             self.checkLoginInfo();
             setTimeout(function () {

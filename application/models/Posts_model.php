@@ -16,7 +16,7 @@ class Posts_model extends CI_Model
 
     public function getPost($id = NULL)
     {
-        if ($id == NULL)
+        if ($id === NULL)
             return NULL;
 
         $post = NULL;
@@ -35,15 +35,18 @@ class Posts_model extends CI_Model
                 json_decode($row['sections'])->sections,
                 $row['text']);
         }
-
         return $post;
     }
 
+    /**
+     * @param int $max
+     * @return array  An array filled with post Ids.
+     */
     public function getLastPostIds($max = 40)
     {
         $max = max(min($max, 40), 1);
 
-        $result = NULL;
+        $result = array();
         $sql = "SELECT id FROM posts ORDER BY date_written DESC LIMIT ?";
         $query = $this->db->query($sql, array($max));
         if ($query->num_rows() > 0) {
@@ -56,6 +59,7 @@ class Posts_model extends CI_Model
     public function getLastPosts($max = 40)
     {
         $max = max(min($max, 40), 1);
+
         $posts = array();
         $result = NULL;
         $sql = "SELECT * FROM posts ORDER BY date_written DESC LIMIT ?";
