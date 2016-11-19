@@ -26,6 +26,7 @@ class Posts_model extends CI_Model
             $row = $query->result_array()[0];
             $post = new Post(
                 $row['id'],
+                $row['title'],
                 $row['image_link'],
                 $row['teaser'],
                 $row['date_written'],
@@ -69,6 +70,7 @@ class Posts_model extends CI_Model
             foreach ($result as $key => $row) {
                 $posts[] = new Post(
                     $row['id'],
+                    $row['title'],
                     $row['image_link'],
                     $row['teaser'],
                     $row['date_written'],

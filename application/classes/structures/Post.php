@@ -13,6 +13,10 @@ class Post
      */
     private $post_id;
     /**
+     * @var string title
+     */
+    private $title;
+    /**
      * @var int image_id
      */
     private $image_link;
@@ -45,15 +49,16 @@ class Post
      */
     private $text;
 
-    public function __construct($id = NULL, $image_id = NULL, $teaser = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $sections = array(), $text = NULL)
+    public function __construct($id = NULL, $title = NULL, $image_link = NULL, $teaser = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $sections = array(), $text = NULL)
     {
-        $this->text = $text;
         $this->post_id = $id;
-        $this->image_link = $image_id;
+        $this->text = $text;
+        $this->title = $title;
+        $this->image_link = $image_link;
         $this->teaser = $teaser;
+        $this->author = $author;
         $this->date_written = $date_written;
         $this->date_changed = $date_changed;
-        $this->author = $author;
 
         $this->keywords = $keywords;
         $this->sections = $sections;
@@ -65,6 +70,14 @@ class Post
     public function getPostId()
     {
         return $this->post_id;
+    }
+
+    /**
+     * @return string title
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
