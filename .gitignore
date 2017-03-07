@@ -1,5 +1,6 @@
 .idea
-application/config/reCaptcha.php
-application/config/config.php
-application/config/database.php
 CI helper/
+
+/application/config/config.php
+/application/config/database.php
+/application/config/reCaptcha.php
