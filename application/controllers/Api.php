@@ -15,9 +15,8 @@
  *          status: <true/false>
  *          name: <username>
  *          email: <email>
- *      Logout <>
- *          status: <true/false>
  * @property Posts_model posts
+ * @property User $_SESSION['user']
  */
 class Api extends CI_Controller
 {
@@ -25,56 +24,44 @@ class Api extends CI_Controller
     {
         parent::__construct();
         session_start();
+        $this->load->model("Users_model", "users");
+        $this->load->model("Captcha_model", "captcha");
     }
 
     public function index()
     {
-        $request = $this->input->post("request");
-        $data = json_decode($this->input->post("data"));
+        echo (new Response("failure", "Unknown request."))->toString();
+    }
 
-        if ($request === NULL || $data === NULL) {
-            echo (new Response("failure", "Malformed request."))->toString();
+    public function requestPostIdList()
+    {
+        $this->load->model("Posts_model", "posts");
+        $postIds = $this->posts->getLastPostIds();
+        echo (new Response("success", NULL, $postIds))->toString();
+    }
 
+    public function requestPost()
+    {
+        $request = $this->input->post("data");
+        $print = print_r($request,true);
+        $data = json_decode($request);
+
+        if ($request === NULL || $data === NULL || !is_numeric($data->postId)) {
+            echo (new Response("failure", "Malformed request.",$print))->toString();
             return;
         }
-        switch ($request) {
-            case "RequestPostList":
-                echo $this->requestPostList();
-                break;
-            case "RequestPost":
-                echo $this->requestPost();
-                break;
-            case "LoginInfo":
-                echo $this->loginInfo();
-                break;
-            case "Logout":
-                echo $this->logout();
-                break;
-            default:
-                echo (new Response("failure", "Unknown request."))->toString();
-        }
-    }
 
-    private function requestPostList()
-    {
         $this->load->model("Posts_model", "posts");
-        $postIds = $this->posts->getLastPostIds();
+        $post = $this->posts->getPost($data->postId);
 
-        return (new Response("success", NULL, $postIds))->toString();
+        echo (new Response("success", "", $post))->toString();
     }
 
-    private function requestPost()
-    {
-        $this->load->model("Posts_model", "posts");
-        $postIds = $this->posts->getLastPostIds();
-
-        return (new Response("success", NULL, $postIds))->toString();
-    }
-
-    private function loginInfo()
+    public function loginInfo()
     {
         if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
-            $user = $_SESSION['user'];
+            /** @var $user User */
+            $user =  $_SESSION['user'];
             $data = array(
                 'status' => TRUE,
                 'name' => $user->getUsername(),
@@ -87,11 +74,10 @@ class Api extends CI_Controller
                 'email' => NULL,
             );
         }
-
-        return (new Response("success", "", $data))->toString();
+        echo (new Response("success", "", $data))->toString();
     }
 
-    private function logout()
+    public function logout()
     {
         if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
             setcookie("PHPSESSID", "", 0);
@@ -104,6 +90,72 @@ class Api extends CI_Controller
                 'status' => FALSE,
             );
         }
-        return (new Response("success", "", $data))->toString();
+        echo (new Response("success", "", $data))->toString();
+    }
+
+    /**
+     * POST Fields required
+     * 'username'
+     * 'password'
+     * 'g-recaptcha-response'
+     */
+    public function login()
+    {
+        $response = new Response();
+
+        $username = $this->input->post("username");
+        $password = $this->input->post("password");
+        $captcha = $this->input->post("g-recaptcha-response");
+
+        if ($username == NULL || $password == NULL) {
+            $response->appendMsg("Incomplete or Missing fields.");
+
+        } else {
+
+            $this->captcha->validate($captcha);
+            if ($this->captcha->isValid()) {
+                $user = $this->users->getUserByLogin($_POST['username'], $_POST['password']);
+
+                if ($user !== NULL) {
+                    $response = new Response("success", "You are now logged in.");
+                    $_SESSION['user'] = $user;
+                } else {
+                    $response->appendMsg("Unknown username password combination.");
+                }
+            } else {
+                $response->appendMsg("Unsolved Captcha.");
+            }
+        }
+        echo $response->toString();
+    }
+
+    public function register()
+    {
+        $response = new Response();
+
+        $username = $this->input->post("username");
+        $password = $this->input->post("password");
+        $email = $this->input->post("email");
+        $captcha = $this->input->post("g-recaptcha-response");
+
+        if ($username == NULL || $password == NULL || $email == NULL) {
+            $response->appendMsg("Incomplete or Missing fields.");
+
+        } else {
+            $this->captcha->validate($captcha);
+            if ($this->captcha->isValid()) {
+                $user = $this->users->addUser($_POST['username'], $_POST['password'], $_POST['email']);
+                if ($user === NULL) {
+                    foreach ($this->users->input_errors as $error) {
+                        $response->appendMsg($error);
+                    }
+                } else {
+                    $response = new Response("success", "Your account has been created.");
+                }
+            } else {
+                $response->appendMsg("Unsolved Captcha.");
+            }
+        }
+        echo $response->toString();
     }
 }

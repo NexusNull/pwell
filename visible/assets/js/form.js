@@ -123,7 +123,7 @@ pwell.ModalForm = function (ModalSelector, FormSelector, url, callback) {
         this.ElementModal.on('shown.bs.modal', function () {
             if (!self.initialized) {
                 self.captchaId = captchas[captchas.length] = grecaptcha.render(self.captcha[0].getAttribute('id'), {
-                    'sitekey': siteKey,
+                    'sitekey': pwell.reCaptchaSiteKey,
                     'size': 'normal'
                 });
                 self.initialized = true;
@@ -139,7 +139,6 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 
 
 var captchas = [];
-var siteKey = "6LeXZQkUAAAAAMIG0EYgi95lbOfE6vLOjmxq5JL-";
 $(document).ready(function () {
     var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "Form/login", function (status) {
         if (status == "success") {

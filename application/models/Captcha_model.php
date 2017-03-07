@@ -6,15 +6,15 @@
  * Date: 10/16/16
  * Time: 4:48 PM
  */
+
+include_once "../application/config/reCaptcha.php";
 class Captcha_model extends CI_Model
 {
-    public $errors = NULL;
-    public $valid = FALSE;
+    private $errors = NULL;
+    private $valid = FALSE;
     private $url = 'https://www.google.com/recaptcha/api/siteverify';
-    private $secret = "6LeXZQkUAAAAACCZz0yikjdAELhazoNNQc4cCr7U";
+    private $secret = RECAPTCHA_SECRETKEY;
     private $result = NULL;
-    private $hostname = NULL;
-    private $challenge_ts = NULL;
 
     public function __construct()
     {
@@ -78,11 +78,18 @@ class Captcha_model extends CI_Model
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
 
         $this->result = json_decode(curl_exec($ch));
         curl_close($ch);
+    }
+    public function isValid(){
+        return $this->valid;
+    }
+    public function getErrors(){
+        return $this->errors;
     }
 
 }
