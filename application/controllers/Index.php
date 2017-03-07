@@ -30,29 +30,20 @@ class Index extends CI_Controller
         );
 
         $headerData['js_src'] = array(
+            'Template/javascriptSettings',
             'assets/js/jquery-2.2.0.js',
             'assets/js/jquery-ui.js',
             'assets/js/jquery.sticky.js',
             'assets/js/bootstrap.min.js',
             'assets/js/form.js',
             'assets/js/controller.js',
+            'assets/js/post.js',
             //'assets/js/effect.bubbles.js',
         );
-
-        $postsIds = $this->posts->getLastPostIds();
 
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
         $this->load->view('parts/page-content-start');
-
-        // TODO : Proper display of default Posts
-        foreach ($postsIds as $id) {
-            $this->load->view('template/template-PostThumbnail', array("post" => $this->posts->getPost($id)));
-        }
-        foreach ($postsIds as $id) {
-            $this->load->view('template/template-Post', array("post" => $this->posts->getPost($id)));
-        }
-
         $this->load->view('parts/page-content-end');
         $this->load->view('parts/register-modal');
         $this->load->view('parts/login-modal');
