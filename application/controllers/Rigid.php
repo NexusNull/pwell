@@ -1,27 +1,37 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 /**
  * Created by PhpStorm.
- * User: patric
- * Date: 6/20/16
- * Time: 8:08 AM
+ * User: nexus
+ * Date: 08/03/17
+ * Time: 03:16
+ * This displays post that can be queried with specific urls.
+ */
+
+require_once "../application/config/reCaptcha.php";
+
+/**
+ * Class Rigid
  * @property Posts_model posts
  */
-require_once "../application/config/reCaptcha.php";
-class Index extends CI_Controller
+class Rigid extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
-        session_start();
+        $this->load->model("Posts_model", "posts");
     }
 
     public function index()
     {
+        $this->post();
+    }
+
+    public function post($postId = NULL)
+    {
         $headerData = array();
         $headerData['meta'] = array(
-            "<script src=\"https://www.google.com/recaptcha/api.js?render=explicit\" async defer></script>"
+            "<script src=\"https://www.google.com/recaptcha/api.js?onload=reCaptcha&render=explicit\" async defer></script>"
         );
 
         $headerData['style_src'] = array(
@@ -37,7 +47,7 @@ class Index extends CI_Controller
             '/assets/js/form.js',
             '/assets/js/controller.js',
             '/assets/js/post.js',
-            //'assets/js/effect.bubbles.js',
+            //'/assets/js/effect.bubbles.js',
         );
 
         $headerData['custom_js'] = "
@@ -45,18 +55,27 @@ class Index extends CI_Controller
             pwell = {};
             pwell.settings = {};
             pwell.settings.siteKey = \"" . RECAPTCHA_SITEKEY . "\";
-            pwell.settings.loadLastestPosts = true;
+            pwell.settings.loadLastestPosts = false;
             pwell.settings.maxPosts = 5";
 
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
         $this->load->view('parts/page-content-start');
+        if ($postId == NULL) {
+            $post = $this->posts->getLastPosts(1);
+            $this->load->view('parts/postTemplate', array("post" => $post[0]));
+        } else {
+            $post = $this->posts->getPost($postId);
+            if ($post != NULL)
+                $this->load->view('parts/postTemplate', array("post" => $post));
+        }
+
 
         $this->load->view('parts/page-content-end');
         $this->load->view('parts/register-modal');
         $this->load->view('parts/login-modal');
         $this->load->view('parts/footer');
-    }
 
+    }
 
 }

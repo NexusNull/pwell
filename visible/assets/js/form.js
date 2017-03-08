@@ -123,7 +123,7 @@ pwell.ModalForm = function (ModalSelector, FormSelector, url, callback) {
         this.ElementModal.on('shown.bs.modal', function () {
             if (!self.initialized) {
                 self.captchaId = captchas[captchas.length] = grecaptcha.render(self.captcha[0].getAttribute('id'), {
-                    'sitekey': pwell.reCaptchaSiteKey,
+                    'sitekey': pwell.settings.siteKey,
                     'size': 'normal'
                 });
                 self.initialized = true;
@@ -140,12 +140,12 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 
 var captchas = [];
 $(document).ready(function () {
-    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "Api/login", function (status) {
+    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/Api/login", function (status) {
         if (status == "success") {
             if (typeof pwell.controller != "undefined" && typeof pwell.controller.checkLoginInfo != "undefined") {
                 pwell.controller.checkLoginInfo();
             }
         }
     });
-    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "Api/register");
+    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "/Api/register");
 });

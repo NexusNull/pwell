@@ -38,17 +38,14 @@ Post.prototype.toggle = function(){
 };
 
 Post.prototype.template = function(){
+    if (pwell.postTemplate != undefined) {
+        return pwell.postTemplate(this.data);
+    } else
     return '<div class="content spacer row post">' +
-        //'<div class="col-xs-3 post-image">'+
-        //'<img style="width: 100%; height: auto" src="'+this.data.image_link+'" alt="Nothing"/>'+
-        //'</div>'+
         '<div>'+
         '<h1 class="post-title clear-fix">'+this.data.title+'</h1>'+
         '<div class="underline"></div>'+
-        '<div class="post-meta"><span class="post-author">'+this.data.author+'</span> ~ <span class="post-date">'+this.data.date_written+'</span></div>'+
-        //'<p class="post-teaser">'+
-        //this.data.teaser+
-        //'</p>'+
+        '<div class="post-meta"><span class="post-author">' + this.data.author + '</span> ~ <span class="post-date">' + this.data.date_changed + '</span></div>' +
         '</div>'+
         '<div class="post-text">'+
         this.data.text+

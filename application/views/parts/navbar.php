@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img src="assets/img/logo.svg"/>
+                <img src="/assets/img/logo.svg"/>
             </a>
         </div>
 

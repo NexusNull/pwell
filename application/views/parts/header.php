@@ -19,6 +19,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     foreach ($meta as $html) {
         echo "    $html\n";
     }
+    echo "    <script type='application/javascript'>";
+
+    echo $custom_js;
+    $this->load->view('parts/postTemplate');
+    echo "\n    </script>\n";
     unset($src);
     unset($html);
     ?>

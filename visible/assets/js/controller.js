@@ -27,7 +27,7 @@ pwell.Controller.prototype.checkLoginInfo = function () {
 
     $.ajax({
         type: "POST",
-        url: "Api/loginInfo",
+        url: "/Api/loginInfo",
         dataType: "json",
         data: "{}",
         success: function (response) {
@@ -117,33 +117,22 @@ $(document).ready(function () {
     $(".content-navigation").sticky();
     pwell.controller = new pwell.Controller();
     pwell.controller.checkLoginInfo();
-
-    /*
-    $(".post").on("click",function(){
-        var element = $(this);
-        element.addClass("post-open");
-    });
-    $(".post-close").on("click",function(e){
-        e.cancelBubble = true;
-        e.stopPropagation();
-
-        var parent = $(this).parent();
-        console.log(parent);
-        if(parent.hasClass("post")){
-            parent.removeClass("post-open");
-            console.log(parent);
-        }
-    });
-    */
-
-    pwell.controller.requestPostIds(function(ids){
-        for(var i=0;i<ids.length;i++){
-            pwell.controller.requestPost(ids[i],function(data){
-                var post = new Post(data);
-                pwell.controller.posts.push(post);
-                post.append();
-            });
-        }
-    });
+    if (pwell.settings == undefined) {
+        console.log("Server failed to deliver settings. switching to defaults");
+        pwell.settings = {};
+        pwell.settings.maxPosts = 5;
+        pwell.settings.loadLastestPosts = true;
+    }
+    if (pwell.settings.loadLastestPosts) {
+        pwell.controller.requestPostIds(function (ids) {
+            for (var i = 0; i < Math.min(ids.length, pwell.settings.maxPosts); i++) {
+                pwell.controller.requestPost(ids[i], function (data) {
+                    var post = new Post(data);
+                    pwell.controller.posts.push(post);
+                    post.append();
+                });
+            }
+        });
+    }
 });
 
