@@ -140,12 +140,12 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 
 var captchas = [];
 $(document).ready(function () {
-    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "Form/login", function (status) {
+    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "Api/login", function (status) {
         if (status == "success") {
             if (typeof pwell.controller != "undefined" && typeof pwell.controller.checkLoginInfo != "undefined") {
                 pwell.controller.checkLoginInfo();
             }
         }
     });
-    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "Form/register");
+    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "Api/register");
 });

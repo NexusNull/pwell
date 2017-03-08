@@ -42,20 +42,23 @@ class Response
         $this->data = $data;
     }
 
-    public function appendData($data = array())
-    {
-
-    }
 
     public function toString()
     {
+        if (is_object($this->data) && method_exists($this->data, "toArray")) {
+            $data = $this->data->toArray();
+        } else if (is_array($this->data)) {
+            $data = $this->data;
+        } else if (is_string($this->data)) {
+            $data = $this->data;
+        } else {
+            throw (new Exception("Not convertible"));
+        }
+
         $response = array(
             'status' => $this->status,
             'msg' => $this->msg,
-            'data' => $this->data);
-
+            'data' => $data);
         return json_encode($response);
     }
-
-
 }

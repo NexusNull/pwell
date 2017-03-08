@@ -19,11 +19,7 @@ class Post
     /**
      * @var int image_id
      */
-    private $image_link;
-    /**
-     * @var string teaser
-     */
-    private $teaser;
+    private $thumbnail;
     /**
      * @var string date_written YYYY-MM-DD HH:MM:SS
      */
@@ -41,27 +37,35 @@ class Post
      */
     private $keywords;
     /**
-     * @var array sections
-     */
-    private $sections;
-    /**
      * @var string text
      */
     private $text;
 
-    public function __construct($id = NULL, $title = NULL, $image_link = NULL, $teaser = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $sections = array(), $text = NULL)
+    public function __construct($id = NULL, $title = NULL, $thumbnail = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $text = NULL)
     {
         $this->post_id = $id;
-        $this->text = $text;
         $this->title = $title;
-        $this->image_link = $image_link;
-        $this->teaser = $teaser;
+        $this->text = $text;
+        $this->thumbnail = $thumbnail;
         $this->author = $author;
         $this->date_written = $date_written;
         $this->date_changed = $date_changed;
 
         $this->keywords = $keywords;
-        $this->sections = $sections;
+    }
+
+    public function toArray(){
+        return array(
+            'id' =>  $this->post_id,
+            'text' =>  $this->text,
+            'title' =>  $this->title,
+            'thumbnail' =>  $this->thumbnail,
+            'author' =>  $this->author,
+            'date_written' =>  $this->date_written,
+            'date_changed' =>  $this->date_changed,
+
+            'keywords' =>  $this->keywords,
+        );
     }
 
     /**
@@ -83,17 +87,9 @@ class Post
     /**
      * @return number
      */
-    public function getImageLink()
+    public function getThumbnail()
     {
-        return $this->image_link;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTeaser()
-    {
-        return $this->teaser;
+        return $this->thumbnail;
     }
 
     /**
@@ -126,14 +122,6 @@ class Post
     public function getKeywords()
     {
         return $this->keywords;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSections()
-    {
-        return $this->sections;
     }
 
     /**

@@ -18,22 +18,32 @@ class Posts_model extends CI_Model
     {
         if ($id === NULL)
             return NULL;
-
         $post = NULL;
-        $sql = "SELECT * FROM posts WHERE posts.id = ? LIMIT 1";
-        $query = $this->db->query($sql, array($id));
-        if ($query->num_rows() > 0) {
-            $row = $query->result_array()[0];
+
+        $sqlPost = "SELECT * FROM posts WHERE posts.id = ? LIMIT 1";
+        $sqlKeywords = "SELECT keyword FROM mapPostKeyword LEFT JOIN keywords ON mapPostKeyword.keywordId = keywords.id WHERE mapPostKeyword.postId = ?";
+        $queryPost = $this->db->query($sqlPost, array($id));
+
+
+        if ($queryPost->num_rows() > 0) {
+            $row = $queryPost->result_array()[0];
+            $queryKeywords = $this->db->query($sqlKeywords, array($id));
+            $keywords = [];
+            if($queryPost->num_rows() > 0){
+                foreach($queryKeywords->result_array() as $keyword){
+                    $keywords[] = $keyword['keyword'];
+                }
+            }
+
+
             $post = new Post(
                 $row['id'],
                 $row['title'],
-                $row['image_link'],
-                $row['teaser'],
+                $row['thumbnail'],
                 $row['date_written'],
                 $row['date_changed'],
                 $row['author'],
-                json_decode($row['keywords'])->keywords,
-                json_decode($row['sections'])->sections,
+                $keywords,
                 $row['text']);
         }
         return $post;
@@ -74,16 +84,13 @@ class Posts_model extends CI_Model
                     $row['id'],
                     $row['title'],
                     $row['image_link'],
-                    $row['teaser'],
                     $row['date_written'],
                     $row['date_changed'],
                     $row['author'],
                     json_decode($row['keywords'])->keywords,
-                    json_decode($row['sections'])->sections,
                     $row['text']);
             }
         }
-
         return $posts;
     }
 

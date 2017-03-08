@@ -27,16 +27,23 @@ body
 .content
   background-color: $container-background
   padding: 15px
-  box-shadow: 0 0 11px -8px #000
-  -webkit-box-shadow: 0 0 11px -5px #000
+  margin-top: 15px
+  //box-shadow: 0 0 11px -8px #000
+  //-webkit-box-shadow: 0 0 11px -5px #000
+
+.content:last-child
+  margin-bottom: 15px
+
+.content:first-child
+  margin-top: 0
 
 .content-navigation
   box-sizing: content-box
   padding-top: 15px
-  min-height: 500px
+  min-height: 250px
   background-color: $container-background
-  box-shadow: 0 0 11px -8px #000
-  -webkit-box-shadow: 0 0 11px -5px #000
+  //box-shadow: 0 0 11px -8px #000
+  //-webkit-box-shadow: 0 0 11px -5px #000
 
 .content-navigation > ol, ul
   padding-left: 15px
@@ -45,14 +52,51 @@ body
 .content-navigation a
   color: #333
 
-.post-thumbnail
-  h1, h2, h3, h4, h5, h6
-    margin:
-      top: 0
-      left: 10px
-      bottom: 5px
+.post-title
+  margin:
+    top: 0
+    left: 0
+    bottom: 0
+
+.post-image
+  margin:
+    top: 0
+  padding: 0
+
+.post-text
+  margin:
+    top: 10px
+    left: 10px
+  padding:
+    right: 25px
+  position: relative
+  text-align: justify
+  font-family: ​Times, serif
+  color: #000
+  width: 100%
+
+.post-meta
+  font-size: 12px
+  margin-left: 10px
+
+.post-author
+  color: #777777
+
+.post-date
+  color: #777777
+
+.clear-fix:after
+  clear: both
 
 .row-no-padding
   [class*="col-"]
     padding-left: 0
     padding-right: 0
+
+.underline
+  position: relative
+  margin:
+    top: 10px
+  background-color: #b6b6b6
+  width: 100%
+  height: 1px
