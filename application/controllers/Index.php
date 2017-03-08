@@ -25,19 +25,19 @@ class Index extends CI_Controller
         );
 
         $headerData['style_src'] = array(
-            'assets/css/bootstrap.min.css',
-            'assets/css/main.css',
+            '/assets/css/bootstrap.min.css',
+            '/assets/css/main.css',
         );
 
         $headerData['js_src'] = array(
-            'Template/javascriptSettings',
-            'assets/js/jquery-2.2.0.js',
-            'assets/js/jquery-ui.js',
-            'assets/js/jquery.sticky.js',
-            'assets/js/bootstrap.min.js',
-            'assets/js/form.js',
-            'assets/js/controller.js',
-            'assets/js/post.js',
+            '/JsInterface/settings',
+            '/assets/js/jquery-2.2.0.js',
+            '/assets/js/jquery-ui.js',
+            '/assets/js/jquery.sticky.js',
+            '/assets/js/bootstrap.min.js',
+            '/assets/js/form.js',
+            '/assets/js/controller.js',
+            '/assets/js/post.js',
             //'assets/js/effect.bubbles.js',
         );
 

@@ -5,7 +5,8 @@
  * Date: 11/19/16
  * Time: 11:19 PM
  */
-class Template extends CI_Controller {
+class JsInterface extends CI_Controller
+{
     public function __construct() {
         parent::__construct();
     }
@@ -15,7 +16,9 @@ class Template extends CI_Controller {
     public function postTemplate(){
         $this->load->view("template/template-Post");
     }
-    public function javascriptSettings(){
+
+    public function settings()
+    {
         $this->load->view("parts/javascript-vars");
     }
 }
