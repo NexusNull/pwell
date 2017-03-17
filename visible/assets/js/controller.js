@@ -36,7 +36,7 @@ pwell.Controller.prototype.checkLoginInfo = function () {
             self.name = data.name;
             self.email = data.email;
 
-            if(self.loggedin)
+            if (self.loggedin)
                 console.log("User is logged in");
             self.update();
         },
@@ -81,9 +81,10 @@ pwell.Controller.prototype.logout = function () {
     });
 };
 
-pwell.Controller.prototype.requestPostIds = function(callback){
-    if(typeof callback != "function")
-        callback = function(){};
+pwell.Controller.prototype.requestPostIds = function (callback) {
+    if (typeof callback != "function")
+        callback = function () {
+        };
     var self = this;
     $.ajax({
         type: "POST",
@@ -96,9 +97,10 @@ pwell.Controller.prototype.requestPostIds = function(callback){
     });
 };
 
-pwell.Controller.prototype.requestPost = function(id, callback){
-    if(typeof callback != "function")
-        callback = function(){};
+pwell.Controller.prototype.requestPost = function (id, callback) {
+    if (typeof callback != "function")
+        callback = function () {
+        };
     var data = {};
     data.postId = id;
     var self = this;
@@ -109,6 +111,60 @@ pwell.Controller.prototype.requestPost = function(id, callback){
         data: "data=" + JSON.stringify(data),
         complete: function (data) {
             callback(data.responseJSON.data);
+        }
+    });
+};
+
+pwell.Controller.prototype.newPost = function () {
+    $.ajax({
+        type: "POST",
+        url: "/Api/createPost",
+        dataType: "json",
+        data: "{}",
+        complete: function (data) {
+            var post = pwell.controller.createPost(data.responseJSON.data);
+            post.editPost();
+        }
+    });
+};
+
+
+pwell.Controller.prototype.createPost = function (data) {
+    var post = new Post(data);
+    pwell.controller.posts.push(post);
+    var element = post.createPost();
+    post.append(element);
+    return post;
+};
+
+pwell.Controller.prototype.editPost = function (post) {
+    var data = post.data;
+    $.ajax({
+        type: "POST",
+        url: "/Api/editPost",
+        dataType: "json",
+        data: "data=" + JSON.stringify(data),
+        complete: function (data) {
+            console.log(data);
+            var post = pwell.controller.createPost(data.responseJSON.data);
+            post.editPost();
+        }
+    });
+};
+
+pwell.Controller.prototype.deletePost = function (post) {
+    post.remove();
+    var id = post.data.id;
+    console.log(post.data);
+    var data = {"postId": id};
+    var self = this;
+    $.ajax({
+        type: "POST",
+        url: "/Api/deletePost",
+        dataType: "json",
+        data: "data=" + JSON.stringify(data),
+        complete: function (data) {
+            console.log(data);
         }
     });
 };
@@ -126,11 +182,7 @@ $(document).ready(function () {
     if (pwell.settings.loadLastestPosts) {
         pwell.controller.requestPostIds(function (ids) {
             for (var i = 0; i < Math.min(ids.length, pwell.settings.maxPosts); i++) {
-                pwell.controller.requestPost(ids[i], function (data) {
-                    var post = new Post(data);
-                    pwell.controller.posts.push(post);
-                    post.append();
-                });
+                pwell.controller.requestPost(ids[i], pwell.controller.createPost.bind(this));
             }
         });
     }

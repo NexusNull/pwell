@@ -28,8 +28,8 @@ class Posts_model extends CI_Model
             $row = $queryPost->result_array()[0];
             $queryKeywords = $this->db->query($sqlKeywords, array($id));
             $keywords = [];
-            if($queryPost->num_rows() > 0){
-                foreach($queryKeywords->result_array() as $keyword){
+            if ($queryPost->num_rows() > 0) {
+                foreach ($queryKeywords->result_array() as $keyword) {
                     $keywords[] = $keyword['keyword'];
                 }
             }
@@ -87,6 +87,7 @@ class Posts_model extends CI_Model
                 $queryKeywords = $this->db->query($sqlKeywords, array($row['id']));
                 $keywords = [];
                 if ($queryPost->num_rows() > 0) {
+
                     foreach ($queryKeywords->result_array() as $keyword) {
                         $keywords[] = $keyword['keyword'];
                     }
@@ -106,4 +107,42 @@ class Posts_model extends CI_Model
         return $posts;
     }
 
+    public function updatePost($id = NULL, $text = "", $title = "", $thumbnail = "none", $keywords = [])
+    {
+        $date = date("Y-m-d");
+        $sql = "UPDATE posts SET title=?,text=?,thumbnail=?, date_changed=? WHERE id = ?";
+        if ($id != NULL) {
+            $this->db->query($sql, array($title, $text, $thumbnail, $date, $id));
+
+        }
+
+    }
+
+    public function createPost()
+    {
+        $date = date("Y-m-d");
+
+        $sqlInsert = "INSERT INTO `posts`(`title`, `text`, `thumbnail`, `author`, `date_written`, `date_changed`) VALUES (?,?,?,?,?,?);";
+        $sqlLastId = "SELECT LAST_INSERT_ID() AS lastID;";
+
+        $query = $this->db->query($sqlInsert, array("", "", "none", "", $date, $date));
+        $queryId = $this->db->query($sqlLastId, array());
+
+        $postId = $queryId->result_array()[0]['lastID'];
+
+        return $this->getPost($postId);
+    }
+
+    public function deletePost($id = NULL)
+    {
+        if ($id != NULL && is_numeric($id)) {
+
+            $sqlDelete = "DELETE FROM `pwell`.`posts` WHERE `posts`.`id` = ?;";
+
+            $query = $this->db->query($sqlDelete, array($id));
+
+            return $query->affected_rows() > 0;
+        }
+        return false;
+    }
 }

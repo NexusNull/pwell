@@ -26,7 +26,9 @@ class Index extends CI_Controller
 
         $headerData['style_src'] = array(
             '/assets/css/bootstrap.min.css',
+            '/assets/quill/quill.snow.css',
             '/assets/css/main.css',
+
         );
 
         $headerData['js_src'] = array(
@@ -37,6 +39,9 @@ class Index extends CI_Controller
             '/assets/js/form.js',
             '/assets/js/controller.js',
             '/assets/js/post.js',
+            '/assets/quill/quill.min.js',
+            '/assets/font'
+            //'/assets/quill/quill.core.js',
             //'assets/js/effect.bubbles.js',
         );
 

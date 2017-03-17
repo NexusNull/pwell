@@ -1,7 +1,9 @@
+@import _palette2.sass
+@import _shades
 $container-background: #ededed
 
 body
-  background-color: #d4d4d4
+  background-color: $shade-white-4
 
 @media (max-width: 480px)
   .container
@@ -16,6 +18,29 @@ body
     margin:
       top: 15px
 
+@mixin navbarGradiant
+  background: $color-primary-4
+  /* Old browsers */
+  background: -moz-linear-gradient(top, $color-primary-4 0%, $color-primary-4 80%, $color-primary-3 80%, $color-primary-3 92%, $color-primary-2 92%, $color-primary-2 100%)
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, $color-primary-4 0%, $color-primary-4 80%, $color-primary-3 80%, $color-primary-3 92%, $color-primary-2 92%, $color-primary-2 100%)
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, $color-primary-4 0%, $color-primary-4 80%, $color-primary-3 80%, $color-primary-3 92%, $color-primary-2 92%, $color-primary-2 100%)
+/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+.navbar-inverse
+  @include navbarGradiant
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:focus,
+.navbar-inverse .navbar-nav > .active > a:hover
+  @include navbarGradiant
+
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:focus,
+.navbar-inverse .navbar-nav > .open > a:hover
+  @include navbarGradiant
+
 .navbar-brand
   margin: 0 7px 0 -7px
   padding: 5px
@@ -25,7 +50,7 @@ body
   height: 40px
 
 .content
-  background-color: $container-background
+  background-color: $shade-white-5
   padding: 15px
   margin-top: 15px
   //box-shadow: 0 0 11px -8px #000
@@ -41,7 +66,7 @@ body
   box-sizing: content-box
   padding-top: 15px
   min-height: 250px
-  background-color: $container-background
+  background-color: $shade-white-5
   //box-shadow: 0 0 11px -8px #000
   //-webkit-box-shadow: 0 0 11px -5px #000
 
@@ -53,6 +78,7 @@ body
   color: #333
 
 .post-title
+  min-height: 40px
   margin:
     top: 0
     left: 0
@@ -72,8 +98,25 @@ body
   position: relative
   text-align: justify
   font-family: ​Times, serif
+  white-space: pre-wrap
   color: #000
   width: 100%
+
+.editable
+  border: 1px solid $color-primary-0
+
+.ql-container
+  border: 1px solid $color-primary-0
+  margin: 0px
+  padding: 0px
+
+.ql-toolbar
+  border: 1px solid $color-primary-0
+
+.ql-editor
+  padding:
+    top: 10px
+    left: 10px
 
 .post-meta
   font-size: 12px
@@ -84,6 +127,9 @@ body
 
 .post-date
   color: #777777
+
+.button
+  cursor: pointer
 
 .clear-fix:after
   clear: both
@@ -97,6 +143,6 @@ body
   position: relative
   margin:
     top: 10px
-  background-color: #b6b6b6
+  background-color: $color-primary-0
   width: 100%
   height: 1px

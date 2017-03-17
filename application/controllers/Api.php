@@ -26,6 +26,7 @@ class Api extends CI_Controller
         session_start();
         $this->load->model("Users_model", "users");
         $this->load->model("Captcha_model", "captcha");
+        $this->load->model("Posts_model", "posts");
     }
 
     public function index()
@@ -35,7 +36,6 @@ class Api extends CI_Controller
 
     public function requestPostIdList()
     {
-        $this->load->model("Posts_model", "posts");
         $postIds = $this->posts->getLastPostIds();
         echo (new Response("success", NULL, $postIds))->toString();
     }
@@ -43,15 +43,13 @@ class Api extends CI_Controller
     public function requestPost()
     {
         $request = $this->input->post("data");
-        $print = print_r($request,true);
         $data = json_decode($request);
 
         if ($request === NULL || $data === NULL || !is_numeric($data->postId)) {
-            echo (new Response("failure", "Malformed request.",$print))->toString();
+            echo (new Response("failure", "Malformed request.", ""))->toString();
             return;
         }
 
-        $this->load->model("Posts_model", "posts");
         $post = $this->posts->getPost($data->postId);
 
         echo (new Response("success", "", $post))->toString();
@@ -61,7 +59,7 @@ class Api extends CI_Controller
     {
         if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
             /** @var $user User */
-            $user =  $_SESSION['user'];
+            $user = $_SESSION['user'];
             $data = array(
                 'status' => TRUE,
                 'name' => $user->getUsername(),
@@ -75,6 +73,56 @@ class Api extends CI_Controller
             );
         }
         echo (new Response("success", "", $data))->toString();
+    }
+
+    public function createPost()
+    {
+        if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
+            //TODO: check permissions
+            $post = $this->posts->createPost();
+            echo (new Response("success", "", $post))->toString();
+        } else {
+            echo (new Response("failure", "Insufficient permissions.", ""))->toString();
+        }
+    }
+
+    public function editPost()
+    {
+        if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
+            //TODO: check permissions
+
+            $request = $this->input->post("data");
+            $data = json_decode($request);
+            print_r($data);
+            //TODO validate json with json-schema or without
+            if ($request === NULL || $data === NULL || !is_numeric($data->id)) {
+                echo (new Response("failure", "Malformed request.", ""))->toString();
+                return;
+            }
+            $postId = $data->id;
+            $postText = $data->text;
+            $postTitle = $data->title;
+            $postKeywords = $data->keywords;
+            $postThumbnail = $data->thumbnail;
+
+            $this->posts->updatePost($postId, $postText, $postTitle, $postThumbnail, $postKeywords);
+        }
+    }
+
+    public function deletePost()
+    {
+        if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
+            //TODO: check permissions
+
+            $request = $this->input->post("data");
+            $data = json_decode($request);
+            //TODO validate json with json-schema or without
+            if ($request === NULL || $data === NULL || !is_numeric($data->postId)) {
+                echo (new Response("failure", "Malformed request.", ""))->toString();
+                return;
+            }
+            $this->posts->deletePost($data->postId);
+        }
     }
 
     public function logout()

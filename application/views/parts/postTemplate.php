@@ -21,16 +21,19 @@ if (isset($post)) {
 
 $template = '
 <div class="content spacer row post">
+    <div class="post-menu">
+        <i class="fa fa-pencil-square-o post-edit button" aria-hidden="true"></i>
+        <i class="fa fa-check-square-o  post-edit-finished button hidden" aria-hidden="true"></i>
+        <i class="fa fa-trash post-delete button" aria-hidden="true"></i>
+    </div>
     <div>
         <h1 class="post-title clear-fix">' . $postTitle . '</h1>
         <div class="underline"></div>
         <div class="post-meta"><span class="post-author">' . $postAuthor . '</span> ~ <span class="post-date">' . $postDate . '</span>
         </div>
     </div>
-    <div class="post-text">
-       ' . $postText . '
-    </div>
-</div>';
+        <div class="post-text">' . $postText . '</div>
+    </div>';
 
 if (!isset($post)) {
     $result = "            pwell.postTemplate = function(data) { \n                return '";
@@ -40,5 +43,12 @@ if (!isset($post)) {
     $result .= "';\n            }";
     $template = $result;
 }
-echo "\n" . $template;
+$template = str_replace("    ", " ", $template);
+$template = str_replace("   ", " ", $template);
+$template = str_replace("  ", " ", $template);
+$template = str_replace("\n", "", $template);
+$template = str_replace("\r", "", $template);
+
+
+echo "\n" . str_replace("  ", " ", $template);
 

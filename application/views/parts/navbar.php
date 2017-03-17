@@ -40,6 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
+                <li class="createPost"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
             </ul>
             <div class="login-buttons">
                 <ul class="nav navbar-nav navbar-right">
