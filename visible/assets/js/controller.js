@@ -155,15 +155,20 @@ pwell.Controller.prototype.createPost = function (data) {
 pwell.Controller.prototype.editPost = function (post) {
     var data = post.data;
     console.log(data);
-    $.post(
-        "/Api/editPost",
-        "data=" + JSON.stringify(data),
-        function (data) {
+    $.ajax({
+        type: "POST",
+        url: "/Api/editPost",
+        dataType: "json",
+        data: "data=" +encodeURIComponent(JSON.stringify(data)),
+        complete: function (data) {
             console.log(data);
-            var post = pwell.controller.createPost(data.responseJSON.data);
-            post.editPost();
-        }),
-        "json"
+            if(data.responseJSON){
+                var post = pwell.controller.createPost(data.responseJSON.data);
+                post.editPost();
+            }
+
+        }
+    });
 };
 
 pwell.Controller.prototype.deletePost = function (post) {
@@ -176,7 +181,7 @@ pwell.Controller.prototype.deletePost = function (post) {
         type: "POST",
         url: "/Api/deletePost",
         dataType: "json",
-        data: encodeURI("data=" + JSON.stringify(data)),
+        data: "data="+encodeURIComponent(JSON.stringify(data)),
         complete: function (data) {
             console.log(data);
         }
