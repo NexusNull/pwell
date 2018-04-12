@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     echo "    <script type='application/javascript'>";
 
     echo $custom_js;
-    $this->load->view('parts/postTemplate');
+    $this->load->view('parts/post_template');
     echo "\n    </script>\n";
     unset($src);
     unset($html);

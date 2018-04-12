@@ -19,12 +19,14 @@ pwell.Controller = function () {
     this.name = null;
     this.email = null;
     this.loggedin = false;
+    this.permissions = {};
+
+    this.currentUserId = 0;
 
 };
 
 pwell.Controller.prototype.checkLoginInfo = function () {
     var self = this;
-
     $.ajax({
         type: "POST",
         url: "/Api/loginInfo",
@@ -35,7 +37,7 @@ pwell.Controller.prototype.checkLoginInfo = function () {
             self.loggedin = data.status;
             self.name = data.name;
             self.email = data.email;
-
+            self.permissions = data.permissions;
             if (self.loggedin)
                 console.log("User is logged in");
             self.update();
@@ -53,11 +55,23 @@ pwell.Controller.prototype.update = function () {
     if (this.loggedin) {
         loginButtons.hide();
         nameField.html(this.name);
-
+        for(var key in this.permissions){
+            var elements = $("."+key);
+            if(this.permissions[key] === "1"){
+                elements.show();
+            } else {
+                elements.hide();
+            }
+        }
         userInfo.show();
     } else {
         loginButtons.show();
         userInfo.hide();
+
+        for(var key in this.permissions){
+            var elements = $("."+key);
+            elements.hide();
+        }
     }
 };
 
@@ -134,22 +148,22 @@ pwell.Controller.prototype.createPost = function (data) {
     pwell.controller.posts.push(post);
     var element = post.createPost();
     post.append(element);
+    pwell.controller.update();
     return post;
 };
 
 pwell.Controller.prototype.editPost = function (post) {
     var data = post.data;
-    $.ajax({
-        type: "POST",
-        url: "/Api/editPost",
-        dataType: "json",
-        data: "data=" + JSON.stringify(data),
-        complete: function (data) {
+    console.log(data);
+    $.post(
+        "/Api/editPost",
+        "data=" + JSON.stringify(data),
+        function (data) {
             console.log(data);
             var post = pwell.controller.createPost(data.responseJSON.data);
             post.editPost();
-        }
-    });
+        }),
+        "json"
 };
 
 pwell.Controller.prototype.deletePost = function (post) {
@@ -162,7 +176,7 @@ pwell.Controller.prototype.deletePost = function (post) {
         type: "POST",
         url: "/Api/deletePost",
         dataType: "json",
-        data: "data=" + JSON.stringify(data),
+        data: encodeURI("data=" + JSON.stringify(data)),
         complete: function (data) {
             console.log(data);
         }
@@ -173,6 +187,7 @@ $(document).ready(function () {
     $(".content-navigation").sticky();
     pwell.controller = new pwell.Controller();
     pwell.controller.checkLoginInfo();
+    pwell.modalController = new pwell.ModalController();
     if (pwell.settings == undefined) {
         console.log("Server failed to deliver settings. switching to defaults");
         pwell.settings = {};

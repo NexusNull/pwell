@@ -113,9 +113,7 @@ class Posts_model extends CI_Model
         $sql = "UPDATE posts SET title=?,text=?,thumbnail=?, date_changed=? WHERE id = ?";
         if ($id != NULL) {
             $this->db->query($sql, array($title, $text, $thumbnail, $date, $id));
-
         }
-
     }
 
     public function createPost()
@@ -141,7 +139,7 @@ class Posts_model extends CI_Model
 
             $query = $this->db->query($sqlDelete, array($id));
 
-            return $query->affected_rows() > 0;
+            return $query;
         }
         return false;
     }

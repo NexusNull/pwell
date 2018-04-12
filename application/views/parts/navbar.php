@@ -31,16 +31,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Projects
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
+                        <li class="dropdown-menu-header">
+                            <div class="header"><a href="#">Lua</a></div>
+                        </li>
+                        <li><a href="#">MineCorp</a></li>
+                        <li><a href="#">NexGenUI</a></li>
+                        <li class="dropdown-menu-header">
+                            <div class="header"><a href="#">Javascript</a></div>
+                        </li>
+                        <li><a href="#">AL Documentation</a></li>
+                        <li><a href="#">AL Bot</a></li>
+                        <li><a href="#">Project255</a></li>
+                        <li class="dropdown-menu-header">
+                            <div class="header"><a href="#">Web</a></div>
+                        </li>
+                        <li><a href="#">pwell</a></li>
+                        <li class="dropdown-menu-header">
+                            <div class="header"><a href="#">Java</a></div>
+                        </li>
+                        <li><a href="#">TeamspeakFun</a></li>
                     </ul>
                 </li>
-                <li class="createPost"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
+                <li class="createPost perm_create_post" style="display:none;"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
+                <li class="createPost perm_grant" style="display:none;"><a href="#" onclick="$('#manageUser').modal('show')">Manage User</a></li>
             </ul>
             <div class="login-buttons">
                 <ul class="nav navbar-nav navbar-right">

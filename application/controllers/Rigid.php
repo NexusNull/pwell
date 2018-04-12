@@ -19,7 +19,7 @@ class Rigid extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Posts_model", "posts");
+
     }
 
     public function index()
@@ -60,20 +60,20 @@ class Rigid extends CI_Controller
 
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
-        $this->load->view('parts/page-content-start');
+        $this->load->view('parts/page_content_start');
         if ($postId == NULL) {
             $post = $this->posts->getLastPosts(1);
-            $this->load->view('parts/postTemplate', array("post" => $post[0]));
+            $this->load->view('parts/post_template', array("post" => $post[0]));
         } else {
             $post = $this->posts->getPost($postId);
             if ($post != NULL)
-                $this->load->view('parts/postTemplate', array("post" => $post));
+                $this->load->view('parts/post_template', array("post" => $post));
         }
 
 
-        $this->load->view('parts/page-content-end');
-        $this->load->view('parts/register-modal');
-        $this->load->view('parts/login-modal');
+        $this->load->view('parts/page_content_end');
+        $this->load->view('parts/register_modal');
+        $this->load->view('parts/login_modal');
         $this->load->view('parts/footer');
 
     }

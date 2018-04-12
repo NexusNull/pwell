@@ -22,9 +22,9 @@ if (isset($post)) {
 $template = '
 <div class="content spacer row post">
     <div class="post-menu">
-        <i class="fa fa-pencil-square-o post-edit button" aria-hidden="true"></i>
+        <i class="fa fa-pencil-square-o post-edit button perm_edit_post" style="display:none;" aria-hidden="true"></i>
         <i class="fa fa-check-square-o  post-edit-finished button hidden" aria-hidden="true"></i>
-        <i class="fa fa-trash post-delete button" aria-hidden="true"></i>
+        <i class="fa fa-trash post-delete button perm_delete_post" style="display:none;" aria-hidden="true"></i>
     </div>
     <div>
         <h1 class="post-title clear-fix">' . $postTitle . '</h1>

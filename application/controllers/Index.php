@@ -21,14 +21,13 @@ class Index extends CI_Controller
     {
         $headerData = array();
         $headerData['meta'] = array(
-            "<script src=\"https://www.google.com/recaptcha/api.js?render=explicit\" async defer></script>"
+            "<script src=\"https://www.google.com/recaptcha/api.js?render=explicit\" async defer></script>",
         );
 
         $headerData['style_src'] = array(
             '/assets/css/bootstrap.min.css',
             '/assets/quill/quill.snow.css',
             '/assets/css/main.css',
-
         );
 
         $headerData['js_src'] = array(
@@ -39,8 +38,9 @@ class Index extends CI_Controller
             '/assets/js/form.js',
             '/assets/js/controller.js',
             '/assets/js/post.js',
+            '/assets/js/modalController.js',
             '/assets/quill/quill.min.js',
-            '/assets/font'
+            '/assets/fonts',
             //'/assets/quill/quill.core.js',
             //'assets/js/effect.bubbles.js',
         );
@@ -55,11 +55,14 @@ class Index extends CI_Controller
 
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
-        $this->load->view('parts/page-content-start');
+        $this->load->view('parts/page_content_start');
 
-        $this->load->view('parts/page-content-end');
-        $this->load->view('parts/register-modal');
-        $this->load->view('parts/login-modal');
+        $this->load->view('parts/page_content_end');
+        $this->load->view('parts/register_modal');
+        $this->load->view('parts/login_modal');
+        $this->load->view('parts/manage_user_modal');
+        $this->load->view('parts/permission_modal');
+        $this->load->view('parts/delete_modal');
         $this->load->view('parts/footer');
     }
 

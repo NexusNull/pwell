@@ -14,11 +14,10 @@ if (typeof pwell == "undefined")
 
 pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
     var self = this;
-    this.callback = callback;
+    this.callback = callback?callback:function(){};
     this.FormSelector = FormSelector;
     this.url = url;
     this.status = 0; // 0:closed, 1:opening, 2:open, 3:closing
-    this.lastResponse = {};
 
     this.TimeoutId = 0;
     this.initialHeight = 0;
@@ -42,6 +41,7 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
             dataType: "json",
             data: self.ElementForm.serialize(),
             success: function (response) {
+                console.log(response)
                 if (self.status == 2) { //is open
                     clearTimeout(self.TimeoutId);
                     self.hideResponse(function () {
@@ -51,24 +51,19 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
                 } else {
                     self.showResponse(response.status, response.msg);
                 }
-                self.callback("success");
-                if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined')
+                self.callback({status:"success",event:response});
+                if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
                     grecaptcha.reset(captchaId);
                 self.TimeoutId = setTimeout(function () {
                     self.hideResponse();
                 }, 10000);
-
             },
             error: function (response) {
-                self.lastResponse = {
-                    status: "error",
-                    msg: "Error: " + response
-                };
-                self.showResponse(response.status, response.msg);
+                self.showResponse("failure", "Error server answered unexpected");
+                console.log(response);
                 self.TimeoutId = setTimeout(function () {
                     self.hideResponse();
                 }, 10000);
-                // alert("Something isn't working right. Try again later.<br>"+msg);
             }
         })
     });
@@ -80,7 +75,7 @@ pwell.AjaxForm.prototype.showResponse = function (status, msg, callback) {
         callback = function () {
         };
     }
-    if (this.status == 0) {
+    if (this.status == 0) { //closed
         this.status = 1; //opening
         this.EFormResponse[0].innerHTML = msg;
         self.EFormResponse.css('margin-top', -self.EFormResponse.outerHeight());
@@ -90,8 +85,8 @@ pwell.AjaxForm.prototype.showResponse = function (status, msg, callback) {
             this.EFormResponse.addClass("form-response-failure");
 
         self.EFormResponse.animate({marginTop: 0}, 500, "easeOutExpo", function () {
-            self.status = 2; //open
-            callback(true);
+                self.status = 2; //open
+                callback(true);
         });
     }
 };
@@ -113,13 +108,14 @@ pwell.AjaxForm.prototype.hideResponse = function (callback) {
     }
 };
 
-pwell.ModalForm = function (ModalSelector, FormSelector, url, callback) {
+pwell.ModalForm = function (ModalSelector, FormSelector, url, callback, useCaptcha) {
     var self = this;
     this.ElementModal = $(ModalSelector);
     this.captcha = this.ElementModal.find(".captcha");
     this.captchaId = 0;
     this.initialized = false;
-    if (this.captcha.length != 0) {
+    this.useCaptcha = !(undefined === useCaptcha) ? useCaptcha : false;
+    if (this.captcha.length != 0 && useCaptcha) {
         this.ElementModal.on('shown.bs.modal', function () {
             if (!self.initialized) {
                 self.captchaId = captchas[captchas.length] = grecaptcha.render(self.captcha[0].getAttribute('id'), {
@@ -130,7 +126,7 @@ pwell.ModalForm = function (ModalSelector, FormSelector, url, callback) {
             }
         })
     }
-    pwell.AjaxForm.call(this, FormSelector, url, this.captchaId, callback);
+    pwell.AjaxForm.call(this, FormSelector, url, useCaptcha?this.captchaId:0, callback);
 };
 
 //Note that Object.create() is unsupported in some older browsers, including IE8:
@@ -140,12 +136,32 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 
 var captchas = [];
 $(document).ready(function () {
-    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/Api/login", function (status) {
-        if (status == "success") {
+    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/Api/login", function (response) {
+        if (response.status == "success") {
             if (typeof pwell.controller != "undefined" && typeof pwell.controller.checkLoginInfo != "undefined") {
                 pwell.controller.checkLoginInfo();
             }
         }
+    },true);
+    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "/Api/register",null,true);
+    var AjaxManageUser = new pwell.ModalForm("#manageUser","#ManageUserForm", "/Api/userInfo", function(response){
+        function template(name,value){
+            return "<div class='row'> <div class='col-xs-2' style='text-transform: capitalize'>"+name+"</div><div class='col-xs-10'>"+value+"</div></div>";
+        }
+        console.log(response);
+        if(response.status === "success"){
+            var event = response.event;
+            if(event.status == "success"){
+                var html = "";
+                for(var i in event.data){
+                    html += template(i,event.data[i]);
+                }
+                pwell.modalController.userId = event.data["id"];
+                pwell.modalController.username = event.data["name"];
+                $("#manageUser").find(".content")[0].innerHTML = html;
+                $(".actionButtons").find("button").removeClass("disabled");
+            }
+        }
     });
-    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "/Api/register");
+    var AjaxPermission = new pwell.ModalForm("#permission","#PermissionForm", "/Api/setPerms");
 });

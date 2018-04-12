@@ -58,16 +58,6 @@ class Users_model extends CI_Model
         return NULL;
     }
 
-    private function validUsername($username)
-    {
-        return preg_match("/^[a-zA-Z0-9]{4,32}$/", $username);
-    }
-
-    private function validPassword($password)
-    {
-        return preg_match("/^.{8,64}$/", $password);
-    }
-
     /**
      * Returns a user object with a specific id.
      * @return User The user with the valid id or NULL when user doesn't exist.
@@ -75,10 +65,31 @@ class Users_model extends CI_Model
     //TODO implement
     public function getUserById($userId)
     {
+        $sql = "SELECT * FROM users WHERE id = ?";
+        if($this->isValidUserId($userId)){
+            $query = $this->db->query($sql,array($userId));
+            if($query->num_rows() > 0){
+                $user = $query->result_array()[0];
 
+                return new User($user["id"],$user["username"],$user["password"],$user["password_salt"],$user["email"]);
+            }
+        }
         return NULL;
     }
 
+    public function getUserByName($username)
+    {
+        $sql = "SELECT * FROM users WHERE username = ? LIMIT 1";
+        if($this->validUsername($username)){
+            $query = $this->db->query($sql,array($username));
+            if($query->num_rows() > 0){
+                $user = $query->result_array()[0];
+
+                return new User($user["id"],$user["username"],$user["password"],$user["password_salt"],$user["email"]);
+            }
+        }
+        return NULL;
+    }
     /**
      * Adds a new User with a random id to the Database. On wrong parameters, returns an array containing reasons.
      * @return User Array of errors.
@@ -92,7 +103,7 @@ class Users_model extends CI_Model
         if (isset($username) && isset($password) && isset($email)) {
 
             if (!$this->validUsername($username))
-                $this->input_errors[] = "The username has to consist of characters and numbers, with a length between 4 and 32.<br>";
+                $this->input_errors[] = "The username has to consist of characters or numbers, with a length between 4 and 32.<br>";
             if (!$this->validPassword($password))
                 $this->input_errors[] = "The password has to consist of characters and numbers, with a length between 8 and 64.<br>";
             if (!$this->validEmail($email))
@@ -124,6 +135,34 @@ class Users_model extends CI_Model
         }
 
         return NULL;
+    }
+
+    public function getSimilarUsernameList($name, $amount){
+        $sql = "SELECT levenshtein(?, username) AS distance , id, username FROM users ORDER BY distance Limit ?;";
+        if($this->validUsername($name)){
+            $query = $this->db->query($sql, array($name,$amount));
+            if($query->num_rows() > 0){
+                $result = [];
+                for($i=0;$i<$query->num_rows();$i++){
+                    $result[$i] = $query->result_array()[$i]["username"];
+                }
+                return $result;
+            }
+        }
+        return [];
+    }
+
+    private function validUsername($username)
+    {
+        return preg_match("/^[a-zA-Z0-9]{4,32}$/", $username);
+    }
+    private function isValidUserId($userId){
+        return preg_match("/^[0-9]{10}$/", $userId);
+    }
+
+    private function validPassword($password)
+    {
+        return preg_match("/^.{8,64}$/", $password);
     }
 
     private function validEmail($email)

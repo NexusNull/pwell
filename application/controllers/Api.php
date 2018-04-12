@@ -18,6 +18,7 @@
  * @property Posts_model posts
  * @property User $_SESSION['user']
  */
+
 class Api extends CI_Controller
 {
     public function __construct()
@@ -27,6 +28,7 @@ class Api extends CI_Controller
         $this->load->model("Users_model", "users");
         $this->load->model("Captcha_model", "captcha");
         $this->load->model("Posts_model", "posts");
+        $this->load->model("Permission_model", "perm");
     }
 
     public function index()
@@ -64,12 +66,14 @@ class Api extends CI_Controller
                 'status' => TRUE,
                 'name' => $user->getUsername(),
                 'email' => $user->getEmail(),
+                'permissions' => $this->perm->getUserPermission($user->getId())
             );
         } else {
             $data = array(
                 'status' => FALSE,
                 'name' => NULL,
                 'email' => NULL,
+                'permissions' => NULL,
             );
         }
         echo (new Response("success", "", $data))->toString();
@@ -78,24 +82,40 @@ class Api extends CI_Controller
     public function createPost()
     {
         if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
-            //TODO: check permissions
+            $user = $_SESSION["user"];
+            if(!$this->perm->hasPermission($user->getId(),"perm_create_post")){
+                $response = new Response();
+                $response->setMsg("Missing perm_create_post permission");
+                echo $response->toString();
+                return;
+            }
+
             $post = $this->posts->createPost();
             echo (new Response("success", "", $post))->toString();
-        } else {
-            echo (new Response("failure", "Insufficient permissions.", ""))->toString();
+        }  else {
+            $response = new Response();
+            $response->setMsg("Action requires login.");
+            echo $response->toString();
         }
     }
 
     public function editPost()
     {
         if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
-            //TODO: check permissions
-
+            $user = $_SESSION["user"];
+            if(!$this->perm->hasPermission($user->getId(),"perm_edit_post")){
+                $response = new Response("failure","Missing perm_edit_post permission");
+                echo $response->toString();
+                return;
+            }
             $request = $this->input->post("data");
+            print_r($request);
+            if($request === NULL)
+                return;
+
             $data = json_decode($request);
-            print_r($data);
             //TODO validate json with json-schema or without
-            if ($request === NULL || $data === NULL || !is_numeric($data->id)) {
+            if ($data === NULL || !is_numeric($data->id)) {
                 echo (new Response("failure", "Malformed request.", ""))->toString();
                 return;
             }
@@ -106,13 +126,25 @@ class Api extends CI_Controller
             $postThumbnail = $data->thumbnail;
 
             $this->posts->updatePost($postId, $postText, $postTitle, $postThumbnail, $postKeywords);
+            $response = new Response("success","");
+            echo $response->toString();
+        } else {
+            $response = new Response();
+            $response->setMsg("Action requires login.");
+            echo $response->toString();
         }
     }
 
     public function deletePost()
     {
         if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
-            //TODO: check permissions
+            $user = $_SESSION["user"];
+            if(!$this->perm->hasPermission($user->getId(),"perm_delete_post")){
+                $response = new Response();
+                $response->setMsg("Missing perm_delete_post permission");
+                echo $response->toString();
+                return;
+            }
 
             $request = $this->input->post("data");
             $data = json_decode($request);
@@ -122,6 +154,11 @@ class Api extends CI_Controller
                 return;
             }
             $this->posts->deletePost($data->postId);
+        } else {
+            $response = new Response();
+            $response->setMsg("Action requires login.");
+            echo $response->toString();
+            return;
         }
     }
 
@@ -204,6 +241,117 @@ class Api extends CI_Controller
                 $response->appendMsg("Unsolved Captcha.");
             }
         }
+        echo $response->toString();
+    }
+
+    public function autoCompleteName(){
+        $response = new Response();
+
+        $username = $this->input->post("username");
+
+        if ($username == NULL) {
+            $response->appendMsg("Incomplete or Missing fields.");
+        }else {
+            if($username){
+                $response->setData($this->user->getSimilarUsernameList($username,10));
+            }
+        }
+
+        echo $response->toString();
+    }
+
+    public function userInfo(){
+        $response = new Response();
+
+        if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){
+            $user = $_SESSION["user"];
+            if(!$this->perm->hasPermission($user->getId(),"perm_view_user")){
+                $response->setMsg("Missing perm_view_user permission");
+                echo $response->toString();
+                return;
+            }
+        } else {
+            $response->setMsg("Action requires login.");
+            echo $response->toString();
+            return;
+        }
+
+        $username = $this->input->post("username");
+        $user = $this->users->getUserByName($username);
+        if($user != NULL){
+            $response = new Response("success");
+            $response->setData(Array(
+                'id' => $user->getId(),
+                'name' => $user->getUsername(),
+                'email' => $user->getEmail(),
+            ));
+        } else {
+            $response->setMsg("Unknown user.");
+        }
+
+        echo $response->toString();
+    }
+
+    public function getPerms(){
+        $response = new Response();
+
+        $userId = $this->input->post("id");
+        if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){
+            $user = $_SESSION["user"];
+            if($user->getId() != $userId){
+                if(!$this->perm->hasPermission($user->getId(),"perm_view_user")){
+                    $response->setMsg("Missing perm_view_user permission");
+                    echo $response->toString();
+                    return;
+                }
+            }
+
+        } else {
+            $response->setMsg("Action requires login.");
+            echo $response->toString();
+            return;
+        }
+
+        $perm = $this->perm->getUserPermission($userId);
+        if($perm != NULL){
+            $response = new Response("success");
+
+            $response->setData($perm);
+        }
+        $response->setMsg($userId);
+        echo $response->toString();
+    }
+
+
+
+    public function setPerms(){
+        $response = new Response();
+        $array = [];
+
+        if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){
+            $user = $_SESSION["user"];
+            if(!$this->perm->hasPermission($user->getId(),"perm_grant")){
+                $response->setMsg("Missing perm_grant permission");
+                echo $response->toString();
+                return;
+            }
+        } else {
+            $response->setMsg("Action requires login.");
+            echo $response->toString();
+            return;
+        }
+
+        foreach($_POST as $key => $value){
+            if(substr( $key, 0, 5 ) == "perm_")
+            $array[$key] = ($value=="1")?1:0;
+        }
+        $result = $this->perm->updatePermissions($array ,$this->input->post("id"));
+        if($result["success"]){
+            $response = new Response("success", "Permission changed.");
+        } else {
+            $response = new Response("failure", $result["error"]);
+        }
+
         echo $response->toString();
     }
 }
