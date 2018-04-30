@@ -17,13 +17,15 @@ body
   .spacer
     margin:
       top: 15px
+@mixin hanger_end
+  background:
+    image: url('/assets/img/hanger_end.png')
+    repeat: no-repeat
+    position: -3px 16.5px
 
 @mixin navbarGradiant
   background:
     color: $color-primary-4
-    position: bottom
-    repeat: repeat-x
-    image: url('/assets/img/bg-gradient.png')
 /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
 .navbar-inverse
@@ -33,27 +35,39 @@ body
 .navbar-inverse .navbar-nav > .active > a:focus,
 .navbar-inverse .navbar-nav > .active > a:hover
   @include navbarGradiant
+  @include hanger_end
+  background:
+    color: transparent
 
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:focus,
 .navbar-inverse .navbar-nav > .open > a:hover
   color: #c2ddff
   @include navbarGradiant
+  @include hanger_end
 
 @media (max-width: 767px)
-  .navbar-inverse .navbar-nav .open .dropdown-menu>li>a
+  .navbar-inverse .navbar-nav .open .dropdown-menu> li > a
+    @include hanger_end
     color: #c2ddff
 
-.navbar-inverse .navbar-nav > li > a
+.navbar-inverse .navbar-nav > li
+  @include hanger_end
   color: #c2ddff
 
 .navbar-brand
   margin: 0 7px 0 -7px
   padding: 5px
 
-.navbar-brand img
-  width: 100px
-  height: 40px
+.hanger
+  position: absolute
+  top: 14px
+  margin-left: -12px
+  width: 100%
+  height: 3px
+  background-color: $color-primary-3
+
+
 
 .content
   background-color: $shade-white-5

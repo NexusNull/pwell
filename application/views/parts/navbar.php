@@ -18,8 +18,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img src="/assets/img/logo.svg"/>
+                <img src="/assets/img/nexus.png"/>
             </a>
+
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
@@ -54,6 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </li>
                 <li class="createPost perm_create_post" style="display:none;"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
                 <li class="createPost perm_grant" style="display:none;"><a href="#" onclick="$('#manageUser').modal('show')">Manage User</a></li>
+                <div class="hanger"></div>
             </ul>
             <div class="login-buttons">
                 <ul class="nav navbar-nav navbar-right">

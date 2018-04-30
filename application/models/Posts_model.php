@@ -16,7 +16,7 @@ class Posts_model extends CI_Model
 
     public function getPost($id = NULL)
     {
-        if ($id === NULL)
+        if ($id === NULL || !is_numeric($id))
             return NULL;
         $post = NULL;
 
@@ -143,4 +143,18 @@ class Posts_model extends CI_Model
         }
         return false;
     }
+
+    private function keywordParse($text = NULL){
+        if($text ==  NULL)
+            return [];
+        $keywords = [];
+
+
+
+
+
+
+
+    }
+
 }

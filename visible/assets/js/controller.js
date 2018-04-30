@@ -29,7 +29,7 @@ pwell.Controller.prototype.checkLoginInfo = function () {
     var self = this;
     $.ajax({
         type: "POST",
-        url: "/Api/loginInfo",
+        url: "/REST/user",
         dataType: "json",
         data: "{}",
         success: function (response) {
@@ -101,8 +101,8 @@ pwell.Controller.prototype.requestPostIds = function (callback) {
         };
     var self = this;
     $.ajax({
-        type: "POST",
-        url: "/Api/requestPostIdList",
+        type: "GET",
+        url: "/REST/posts",
         dataType: "json",
         data: "{}",
         complete: function (data) {
@@ -115,14 +115,10 @@ pwell.Controller.prototype.requestPost = function (id, callback) {
     if (typeof callback != "function")
         callback = function () {
         };
-    var data = {};
-    data.postId = id;
-    var self = this;
     $.ajax({
-        type: "POST",
-        url: "/Api/requestPost",
+        type: "GET",
+        url: "/REST/posts/"+id,
         dataType: "json",
-        data: "data=" + JSON.stringify(data),
         complete: function (data) {
             callback(data.responseJSON.data);
         }
@@ -131,8 +127,8 @@ pwell.Controller.prototype.requestPost = function (id, callback) {
 
 pwell.Controller.prototype.newPost = function () {
     $.ajax({
-        type: "POST",
-        url: "/Api/createPost",
+        type: "PUT",
+        url: "/REST/createPost",
         dataType: "json",
         data: "{}",
         complete: function (data) {

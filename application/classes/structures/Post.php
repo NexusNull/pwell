@@ -11,7 +11,7 @@ class Post
     /**
      * @var int post_id
      */
-    private $post_id;
+    private $id;
     /**
      * @var string title
      */
@@ -43,7 +43,7 @@ class Post
 
     public function __construct($id = NULL, $title = NULL, $thumbnail = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $text = NULL)
     {
-        $this->post_id = $id;
+        $this->id = $id;
         $this->title = $title;
         $this->text = $text;
         $this->thumbnail = $thumbnail;
@@ -56,7 +56,7 @@ class Post
 
     public function toArray(){
         return array(
-            'id' =>  $this->post_id,
+            'id' =>  $this->id,
             'text' =>  $this->text,
             'title' =>  $this->title,
             'thumbnail' =>  $this->thumbnail,
@@ -71,9 +71,9 @@ class Post
     /**
      * @return number
      */
-    public function getPostId()
+    public function getId()
     {
-        return $this->post_id;
+        return $this->id;
     }
 
     /**
