@@ -22,6 +22,7 @@ class Index extends CI_Controller
         $headerData = array();
         $headerData['meta'] = array(
             "<script src=\"https://www.google.com/recaptcha/api.js?render=explicit\" async defer></script>",
+            "<meta http-equiv=\"Content-Security-Policy\" content=\"worker-src 'www.google.com/recaptcha/*'\">",
         );
 
         $headerData['style_src'] = array(
@@ -39,6 +40,7 @@ class Index extends CI_Controller
             '/assets/js/controller.js',
             '/assets/js/post.js',
             '/assets/js/modalController.js',
+            '/assets/js/rest.js',
             '/assets/quill/quill.min.js',
             '/assets/fonts',
             //'/assets/quill/quill.core.js',

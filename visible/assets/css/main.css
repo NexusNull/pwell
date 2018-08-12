@@ -2377,8 +2377,8 @@ body {
 .hanger {
   position: absolute;
   top: 14px;
-  margin-left: -12px;
-  width: 100%;
+  margin-left: 12px;
+  width: 95%;
   height: 3px;
   background-color: #3E67AB; }
 

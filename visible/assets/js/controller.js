@@ -27,52 +27,47 @@ pwell.Controller = function () {
 
 pwell.Controller.prototype.checkLoginInfo = function () {
     var self = this;
-    $.ajax({
-        type: "POST",
-        url: "/REST/user",
-        dataType: "json",
-        data: "{}",
-        success: function (response) {
-            var data = response.data;
+    pwell.rest.getSelfInfo({
+        success: function(msg, data){
             self.loggedin = data.status;
             self.name = data.name;
             self.email = data.email;
             self.permissions = data.permissions;
-            if (self.loggedin)
-                console.log("User is logged in");
             self.update();
         },
-        error: function (response) {
+        error: function(){
             console.log("error: checkingLoginInfo");
         }
-    });
+    })
 };
 
 pwell.Controller.prototype.update = function () {
+    var self = this;
     var loginButtons = $(".login-buttons");
     var userInfo = $(".user-info");
     var nameField = userInfo.find(".name-field");
-    if (this.loggedin) {
+    if(this.loggedin){
         loginButtons.hide();
-        nameField.html(this.name);
-        for(var key in this.permissions){
-            var elements = $("."+key);
-            if(this.permissions[key] === "1"){
-                elements.show();
-            } else {
-                elements.hide();
-            }
-        }
         userInfo.show();
+        nameField.html(this.name);
     } else {
         loginButtons.show();
         userInfo.hide();
-
-        for(var key in this.permissions){
-            var elements = $("."+key);
-            elements.hide();
-        }
     }
+
+    $(".require_perm").each(function(){
+        var visible = false;
+        for (var j in self.permissions) {
+            if ($(this).hasClass(j) && self.permissions[j]) {
+                $(this).show();
+                visible = true;
+            }
+        }
+        if(!visible){
+            $(this).hide();
+        }
+
+    });
 };
 
 pwell.Controller.prototype.moveTo = function () {
@@ -81,11 +76,11 @@ pwell.Controller.prototype.moveTo = function () {
 
 pwell.Controller.prototype.logout = function () {
     var self = this;
+    pwell.rest.logout();
     $.ajax({
-        type: "POST",
-        url: "/Api/logout",
+        type: "GET",
+        url: "/REST/user/logout",
         dataType: "json",
-        data: "{}",
         complete: function () {
             self.checkLoginInfo();
             setTimeout(function () {
@@ -117,7 +112,7 @@ pwell.Controller.prototype.requestPost = function (id, callback) {
         };
     $.ajax({
         type: "GET",
-        url: "/REST/posts/"+id,
+        url: "/REST/posts/" + id,
         dataType: "json",
         complete: function (data) {
             callback(data.responseJSON.data);
@@ -155,10 +150,10 @@ pwell.Controller.prototype.editPost = function (post) {
         type: "POST",
         url: "/Api/editPost",
         dataType: "json",
-        data: "data=" +encodeURIComponent(JSON.stringify(data)),
+        data: "data=" + encodeURIComponent(JSON.stringify(data)),
         complete: function (data) {
             console.log(data);
-            if(data.responseJSON){
+            if (data.responseJSON) {
                 var post = pwell.controller.createPost(data.responseJSON.data);
                 post.editPost();
             }
@@ -177,7 +172,7 @@ pwell.Controller.prototype.deletePost = function (post) {
         type: "POST",
         url: "/Api/deletePost",
         dataType: "json",
-        data: "data="+encodeURIComponent(JSON.stringify(data)),
+        data: "data=" + encodeURIComponent(JSON.stringify(data)),
         complete: function (data) {
             console.log(data);
         }

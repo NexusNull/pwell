@@ -77,8 +77,6 @@ class Rest extends CI_Controller
             case "POST":
                 switch($action){
                     case "login":
-                        $response = new Response();
-
                         $username = $this->input->post("username");
                         $password = $this->input->post("password");
                         $captcha = $this->input->post("g-recaptcha-response");
@@ -91,8 +89,8 @@ class Rest extends CI_Controller
                                 $user = $this->users->getUserByLogin($_POST['username'], $_POST['password']);
 
                                 if ($user !== NULL) {
-                                    (new Response("success", "You are now logged in."))->output(Response::HTTP_OK);
                                     $_SESSION['user'] = $user;
+                                    (new Response("success", "You are now logged in."))->output(Response::HTTP_OK);
                                 } else {
                                     (new Response("failure","Unknown username password combination."))->output(Response::HTTP_BAD_REQUEST);
                                 }
@@ -119,7 +117,7 @@ class Rest extends CI_Controller
                                     foreach ($this->users->input_errors as $error) {
                                         $response += $error;
                                     }
-                                    (new Response("success", $response))->output(Response::HTTP_BAD_REQUEST);
+                                    (new Response("failure", $response))->output(Response::HTTP_BAD_REQUEST);
                                 } else {
                                     (new Response("success", "Your account has been created."))->output(Response::HTTP_OK);
                                 }

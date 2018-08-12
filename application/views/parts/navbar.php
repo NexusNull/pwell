@@ -53,9 +53,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li><a href="#">TeamspeakFun</a></li>
                     </ul>
                 </li>
-                <li class="createPost perm_create_post" style="display:none;"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
-                <li class="createPost perm_grant" style="display:none;"><a href="#" onclick="$('#manageUser').modal('show')">Manage User</a></li>
-                <div class="hanger"></div>
+                <li class="dropdown require_perm perm_create_post perm_grant">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="createPost require_perm perm_create_post"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
+                        <li class="createPost require_perm perm_grant"><a href="#" onclick="$('#manageUser').modal('show')">Manage User</a></li>
+                    </ul>
+                </li>
             </ul>
             <div class="login-buttons">
                 <ul class="nav navbar-nav navbar-right">
@@ -73,6 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <li><a href="#" onclick="pwell.controller.moveTo()">Hello <span class="name-field"></span></a></li>
                 </ul>
             </div>
+            <div class="hanger"></div>
         </div>
     </div>
 </nav>

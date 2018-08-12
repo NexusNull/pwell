@@ -14,7 +14,8 @@ if (typeof pwell == "undefined")
 
 pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
     var self = this;
-    this.callback = callback?callback:function(){};
+    this.callback = callback ? callback : function () {
+    };
     this.FormSelector = FormSelector;
     this.url = url;
     this.status = 0; // 0:closed, 1:opening, 2:open, 3:closing
@@ -33,39 +34,38 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
 
     this.ElementForm.submit(function (event) {
         event.preventDefault();
-        if (self.status != 1 && self.status != 3)
-            console.log(self.ElementForm.serialize());
-        $.ajax({
-            type: "POST",
-            url: url,
-            dataType: "json",
-            data: self.ElementForm.serialize(),
-            success: function (response) {
-                console.log(response)
+        if (self.status != 1 && self.status != 3);
+        var formData = self.ElementForm.serializeArray();
+        var data = {};
+        for(var i in formData)
+            data[formData[i].name] = formData[i].value;
+        console.log(data)
+
+        pwell.rest.login(data.username, data.password, data["g-recaptcha-response"], {
+            error: function (msg,data) {
+                self.showResponse("failure", msg);
+                self.TimeoutId = setTimeout(function () {
+                    self.hideResponse();
+                }, 10000);
+            },
+            success: function (msg, data) {
                 if (self.status == 2) { //is open
                     clearTimeout(self.TimeoutId);
                     self.hideResponse(function () {
-                        self.showResponse(response.status, response.msg);
+                        self.showResponse("success", msg);
 
                     });
                 } else {
-                    self.showResponse(response.status, response.msg);
+                    self.showResponse("success", msg);
                 }
-                self.callback({status:"success",event:response});
+                self.callback({status: "success", event: data});
                 if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
                     grecaptcha.reset(captchaId);
                 self.TimeoutId = setTimeout(function () {
                     self.hideResponse();
                 }, 10000);
-            },
-            error: function (response) {
-                self.showResponse("failure", "Error server answered unexpected");
-                console.log(response);
-                self.TimeoutId = setTimeout(function () {
-                    self.hideResponse();
-                }, 10000);
             }
-        })
+        });
     });
 };
 
@@ -85,8 +85,8 @@ pwell.AjaxForm.prototype.showResponse = function (status, msg, callback) {
             this.EFormResponse.addClass("form-response-failure");
 
         self.EFormResponse.animate({marginTop: 0}, 500, "easeOutExpo", function () {
-                self.status = 2; //open
-                callback(true);
+            self.status = 2; //open
+            callback(true);
         });
     }
 };
@@ -126,7 +126,7 @@ pwell.ModalForm = function (ModalSelector, FormSelector, url, callback, useCaptc
             }
         })
     }
-    pwell.AjaxForm.call(this, FormSelector, url, useCaptcha?this.captchaId:0, callback);
+    pwell.AjaxForm.call(this, FormSelector, url, useCaptcha ? this.captchaId : 0, callback);
 };
 
 //Note that Object.create() is unsupported in some older browsers, including IE8:
@@ -136,25 +136,26 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 
 var captchas = [];
 $(document).ready(function () {
-    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/Api/login", function (response) {
+    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/REST/user/login", function (response) {
         if (response.status == "success") {
             if (typeof pwell.controller != "undefined" && typeof pwell.controller.checkLoginInfo != "undefined") {
                 pwell.controller.checkLoginInfo();
             }
         }
-    },true);
-    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "/Api/register",null,true);
-    var AjaxManageUser = new pwell.ModalForm("#manageUser","#ManageUserForm", "/Api/userInfo", function(response){
-        function template(name,value){
-            return "<div class='row'> <div class='col-xs-2' style='text-transform: capitalize'>"+name+"</div><div class='col-xs-10'>"+value+"</div></div>";
+    }, true);
+    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "/REST/user/register", null, true);
+    var AjaxManageUser = new pwell.ModalForm("#manageUser", "#ManageUserForm", "/REST/user/info", function (response) {
+        function template(name, value) {
+            return "<div class='row'> <div class='col-xs-2' style='text-transform: capitalize'>" + name + "</div><div class='col-xs-10'>" + value + "</div></div>";
         }
+
         console.log(response);
-        if(response.status === "success"){
+        if (response.status === "success") {
             var event = response.event;
-            if(event.status == "success"){
+            if (event.status == "success") {
                 var html = "";
-                for(var i in event.data){
-                    html += template(i,event.data[i]);
+                for (var i in event.data) {
+                    html += template(i, event.data[i]);
                 }
                 pwell.modalController.userId = event.data["id"];
                 pwell.modalController.username = event.data["name"];
@@ -163,5 +164,5 @@ $(document).ready(function () {
             }
         }
     });
-    var AjaxPermission = new pwell.ModalForm("#permission","#PermissionForm", "/Api/setPerms");
+    var AjaxPermission = new pwell.ModalForm("#permission", "#PermissionForm", "/Api/setPerms");
 });

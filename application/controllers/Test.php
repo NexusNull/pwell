@@ -19,6 +19,6 @@ class Test extends CI_Controller
     {
         if (ENVIRONMENT == "production")
             return;
-        var_dump ($this->perm->getUserPermission(1644863190));
+        phpinfo();
     }
 }
