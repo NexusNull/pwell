@@ -145,7 +145,7 @@ class Rest extends CI_Controller
     public function posts($id = NULL)
     {
         switch ($this->input->server('REQUEST_METHOD')) {
-            case "POST":
+            case "PUT":
                 //Used to create a resource
                 if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
                     $user = $_SESSION["user"];
@@ -153,20 +153,29 @@ class Rest extends CI_Controller
                         (new Response("failure", "Missing perm_create_post permission"))->output(Response::HTTP_FORBIDDEN);
 
                     } else {
-                        $request = $this->input->post("data");
+                        parse_str(file_get_contents("php://input"),$request);
+
                         if ($request === NULL) {
-                            $post = $this->posts->createPost();
+                            (new Response("failure", "Missing post data", ""))->output(Response::HTTP_BAD_REQUEST);
                         }
 
-                        $data = json_decode($request);
-                        if ($data === NULL || !isset($data->text) || !isset($data->title)) {
-                            (new Response("failure", "Malformed request.", ""))->output(Response::HTTP_FORBIDDEN);
-
+                        $data = json_decode($request["data"]);
+                        if ($data === NULL) {
+                            (new Response("failure", "Malformed request data", ""))->output(Response::HTTP_BAD_REQUEST);
                         }
 
+                        if (!isset($data->text)) {
+                            (new Response("failure", "Missing text field", ""))->output(Response::HTTP_BAD_REQUEST);
+                        }
+
+                        if (!isset($data->title)) {
+                            (new Response("failure", "Missing title field", ""))->output(Response::HTTP_BAD_REQUEST);
+                        }
+
+                        $post = $this->posts->createPost();
                         $postId = $post->getId();
                         $postText = (isset($data->text) ? $data->text : NULL);
-                        $postTitle = (isset($data->title) ? $data->id : NULL);
+                        $postTitle = (isset($data->title) ? $data->title : NULL);
 
                         $this->posts->updatePost($postId, $postText, $postTitle);
 
@@ -178,7 +187,7 @@ class Rest extends CI_Controller
 
                 }
                 break;
-            case "PUT":
+            case "POST":
                 //Used to edit a resource
                 if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
                     $user = $_SESSION["user"];
@@ -186,7 +195,7 @@ class Rest extends CI_Controller
                         (new Response("failure", "Missing perm_edit_post permission"))->output(Response::HTTP_FORBIDDEN);
                     } else {
                         if ($id != NULL) {
-                            if (is_numeric($id)) {
+                            if (is_numeric($id) && $id > 0) {
                                 $request = $this->input->post("data");
                                 if ($request === NULL) {
                                     (new Response("failure", "Missing field data"))->output(Response::HTTP_BAD_REQUEST);
@@ -210,7 +219,7 @@ class Rest extends CI_Controller
 
 
                                 $postText = (isset($data->text) ? $data->text : NULL);
-                                $postTitle = (isset($data->title) ? $data->id : NULL);
+                                $postTitle = (isset($data->title) ? $data->title : NULL);
 
                                 $this->posts->updatePost($id, $postText, $postTitle);
 

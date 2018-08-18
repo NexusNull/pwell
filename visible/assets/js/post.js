@@ -5,64 +5,67 @@
 if (typeof pwell == "undefined")
     pwell = {};
 
-
-var Post = function (data) {
-    this.shown = false;
+pwell.Post = function (data) {
     this.data = data;
-    this.open = false;
-    this.element = {};
+    this.element = null;
+    this.buttons = {};
+    this.editor = null;
     this.buttons = {};
 
-    this.editor = null;
 };
 
-Post.prototype.append = function (element) {
-    this.buttons = element.buttons;
-    this.element = element;
-    $(".post-container").append(element);
+pwell.Post.prototype.getHTMLElement = function(){
+    if(!this.element) {
+        let div = document.createElement('div');
+        div.innerHTML = this.template();
+        var self = this;
+        this.element = div.firstChild;
+
+        this.buttons = {};
+        this.buttons.postEditButton = this.element .getElementsByClassName("post-edit")[0];
+
+        this.buttons.postEditFinishedButton = this.element .getElementsByClassName("post-edit-finished")[0];
+
+        this.buttons.postDeleteButton = this.element .getElementsByClassName("post-delete")[0];
+
+        this.buttons.postEditButton.addEventListener("click", function(){
+            self.enableEditing()
+        });
+        this.buttons.postEditFinishedButton.addEventListener("click", function(){
+            self.disableEditing()
+            if(self.data.id === -1){
+                pwell.rest.createPost(self.data.title, self.data.text,{
+                    success:function(){
+                        self.destroy()
+                    }
+                })
+            } else {
+                pwell.rest.editPost(self.data.id, self.data.title, self.data.text,{
+                    error:function(msg,data){
+                        console.log(arguments);
+                    }
+                });
+            }
+        });
+        this.buttons.postDeleteButton.addEventListener("click", function(){
+            self.destroy();
+            pwell.rest.deletePost(self.data.id,{
+                error:function(msg,data){
+                    console.log(arguments);
+                }
+            });
+        });
+        return this.element;
+    } else {
+        return this.element;
+    }
 };
 
-Post.prototype.insert = function (element) {
-    this.buttons = element.buttons;
-    this.element = element;
-    $(".post-container").append(element);
+pwell.Post.prototype.destroy = function(){
+    pwell.controller.postContainer.remove(this);
 };
 
-Post.prototype.createPost = function () {
-    var div = document.createElement('div');
-    div.innerHTML = this.template();
-    var element = div.firstChild;
-    element.buttons = {};
-    element.buttons.postEditButton = element.getElementsByClassName("post-edit")[0];
-
-    element.buttons.postEditFinishedButton = element.getElementsByClassName("post-edit-finished")[0];
-
-    element.buttons.postDeleteButton = element.getElementsByClassName("post-delete")[0];
-
-    element.buttons.postEditButton.addEventListener("click", this.editPost.bind(this));
-    element.buttons.postEditFinishedButton.addEventListener("click", this.submitPost.bind(this));
-    element.buttons.postDeleteButton.addEventListener("click", pwell.controller.deletePost.bind(null, this));
-
-    return element;
-};
-
-Post.prototype.minimize = function () {
-
-};
-
-Post.prototype.maximize = function () {
-
-};
-
-Post.prototype.toggle = function () {
-
-};
-
-Post.prototype.remove = function () {
-    this.element.parentElement.removeChild(this.element);
-};
-
-Post.prototype.template = function () {
+pwell.Post.prototype.template = function () {
     if (pwell.postTemplate != undefined) {
         return pwell.postTemplate(this.data);
     } else
@@ -78,37 +81,7 @@ Post.prototype.template = function () {
             '</div>';
 };
 
-Post.prototype.submitPost = function () {
-
-    this.buttons.postEditButton.classList.remove("hidden");
-    this.buttons.postEditFinishedButton.classList.add("hidden");
-
-    if (this.editor != null) {
-        var content = this.editor.root.innerHTML;
-        var title = this.element.getElementsByClassName("post-title")[0].innerHTML;
-        this.data.title = title;
-        this.data.text = content;
-
-        /*
-         TODO: as of Version "1.2.2" of Quill there is no documented way of destroying the editor object
-         As soon as it is, it should be implemented here instead of the manual way.
-         */
-
-        //Replace Post
-        var element = this.createPost();
-        var container = document.getElementsByClassName("post-container")[0];
-        var container = document.getElementsByClassName("post-container")[0];
-        container.replaceChild(element, this.element);
-
-        this.buttons = element.buttons;
-        this.element = element;
-
-        pwell.controller.editPost(this);
-    }
-
-};
-
-Post.prototype.editPost = function () {
+pwell.Post.prototype.enableEditing = function () {
     var element = this.element;
 
     this.buttons.postEditFinishedButton.classList.remove("hidden");
@@ -144,8 +117,36 @@ Post.prototype.editPost = function () {
     };
 
     titleEle.classList.add("editable");
-    titleEle.setAttribute("contentEditable", true);
+    titleEle.setAttribute("contentEditable", "true");
 
     this.editor = new Quill(textEle, options);
+};
+
+pwell.Post.prototype.disableEditing = function(){
+
+    this.buttons.postEditButton.classList.remove("hidden");
+    this.buttons.postEditFinishedButton.classList.add("hidden");
+
+    if (this.editor != null) {
+        var content = this.editor.root.innerHTML;
+        var title = this.element.getElementsByClassName("post-title")[0].innerHTML;
+        this.data.title = title;
+        this.data.text = content;
+
+        $(this.element).find(".ql-toolbar")[0].remove();
+        $(this.element).find(".post-title").removeClass("editable");
+        $(this.element).find(".post-title").attr('contenteditable','false');
+
+        $(this.element).find(".post-text").removeClass("ql-container");
+        $(this.element).find(".post-text").removeClass("ql-snow");
+
+        $(this.element).find(".ql-editor").attr('contenteditable','false');
+
+        $(this.element).find('.post-text').append($('.ql-editor').children());
+
+        $(this.element).find(".ql-editor")[0].remove();
+        $(this.element).find(".ql-clipboard")[0].remove();
+        $(this.element).find(".ql-tooltip")[0].remove();
+    }
 
 };

@@ -37,6 +37,7 @@ class Index extends CI_Controller
             '/assets/js/jquery.sticky.js',
             '/assets/js/bootstrap.min.js',
             '/assets/js/form.js',
+            '/assets/js/postContainer.js',
             '/assets/js/controller.js',
             '/assets/js/post.js',
             '/assets/js/modalController.js',

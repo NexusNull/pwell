@@ -89,7 +89,7 @@ pwell.rest.getPostIds = function (settings) {
     this.defaultRequest({url: "REST/posts", method: "GET", success: settings.success, error: settings.error})
 };
 
-pwell.rest.createPost = function (id, title, text, settings) {
+pwell.rest.createPost = function (title, text, settings) {
     if(settings == null) {
         settings = {};
         settings.error = function () {};
@@ -99,9 +99,9 @@ pwell.rest.createPost = function (id, title, text, settings) {
             title:title,
             text:text
         }));
-    this.defaultRequest({url: "REST/posts/" + id, method: "POST", data:data, success: settings.success, error: settings.error})
+    this.defaultRequest({url: "REST/posts/", method: "PUT", data:data, success: settings.success, error: settings.error})
 };
-pwell.rest.editPost = function (id, title,text, settings) {
+pwell.rest.editPost = function (id, title, text, settings) {
     if(settings == null) {
         settings = {};
         settings.error = function () {};
@@ -111,7 +111,7 @@ pwell.rest.editPost = function (id, title,text, settings) {
             title:title,
             text:text
         }));
-    this.defaultRequest({url: "REST/posts/" + id, method: "PUT", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "REST/posts/" + id,data:data, method: "POST", success: settings.success, error: settings.error})
 };
 pwell.rest.deletePost = function (id,settings) {
     if(settings == null) {

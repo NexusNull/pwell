@@ -39,7 +39,7 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
         var data = {};
         for(var i in formData)
             data[formData[i].name] = formData[i].value;
-        console.log(data)
+        //console.log(data)
 
         pwell.rest.login(data.username, data.password, data["g-recaptcha-response"], {
             error: function (msg,data) {
@@ -137,9 +137,10 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 var captchas = [];
 $(document).ready(function () {
     var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/REST/user/login", function (response) {
-        if (response.status == "success") {
-            if (typeof pwell.controller != "undefined" && typeof pwell.controller.checkLoginInfo != "undefined") {
-                pwell.controller.checkLoginInfo();
+        if (response.status === "success") {
+            if (typeof pwell.controller !== "undefined" && typeof pwell.controller.updateLoginInfo !== "undefined") {
+                pwell.controller.updateLoginInfo();
+                pwell.controller.updateUI()
             }
         }
     }, true);
@@ -149,7 +150,7 @@ $(document).ready(function () {
             return "<div class='row'> <div class='col-xs-2' style='text-transform: capitalize'>" + name + "</div><div class='col-xs-10'>" + value + "</div></div>";
         }
 
-        console.log(response);
+        //console.log(response);
         if (response.status === "success") {
             var event = response.event;
             if (event.status == "success") {

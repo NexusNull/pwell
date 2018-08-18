@@ -57,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="createPost require_perm perm_create_post"><a href="#" onclick="pwell.controller.newPost()">Create Post</a></li>
+                        <li class="createPost require_perm perm_create_post"><a href="#" onclick="pwell.controller.createNewPost()">Create Post</a></li>
                         <li class="createPost require_perm perm_grant"><a href="#" onclick="$('#manageUser').modal('show')">Manage User</a></li>
                     </ul>
                 </li>

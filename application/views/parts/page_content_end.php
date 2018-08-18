@@ -8,7 +8,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 </div>
-<div class="col-md-3 visible-lg-block visible-md-block">
+<div class="col-md-4 visible-lg-block visible-md-block">
     <div class="content-navigation">
         <ul>
             <li><a href="#">Top</a></li>
