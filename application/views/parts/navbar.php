@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li><a href="#">TeamspeakFun</a></li>
                     </ul>
                 </li>
-                <li class="dropdown require_perm perm_create_post perm_grant">
+                <li class="dropdown require_perm perm_create_post perm_grant" style="display:none">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
@@ -71,10 +71,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </ul>
             </div>
             <div class="user-info">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" style="display:none">
                     <li><a href="#" onclick="pwell.controller.logout()">Logout</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" style="display:none">
                     <li><a href="#" onclick="pwell.controller.moveTo()">Hello <span class="name-field"></span></a></li>
                 </ul>
             </div>

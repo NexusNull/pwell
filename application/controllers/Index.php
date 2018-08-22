@@ -59,7 +59,7 @@ class Index extends CI_Controller
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
         $this->load->view('parts/page_content_start');
-
+        $this->load->view('parts/no_js');
         $this->load->view('parts/page_content_end');
         $this->load->view('parts/register_modal');
         $this->load->view('parts/login_modal');

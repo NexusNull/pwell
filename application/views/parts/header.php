@@ -10,20 +10,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!DOCTYPE html>
 <html lang="en">
 <head><?php
-    foreach ($style_src as $src) {
-        echo "    <link rel=\"stylesheet\" href=\"$src\">\n";
+    if(isset($style_src))
+        foreach ($style_src as $src) {
+            echo "    <link rel=\"stylesheet\" href=\"$src\">\n";
+        }
+    if(isset($js_src))
+        foreach ($js_src as $src) {
+            echo "    <script type=\"text/javascript\" src=\"$src\"></script>\n";
+        }
+    if(isset($meta))
+        foreach ($meta as $html) {
+            echo "    $html\n";
+        }
+    if(isset($custom_js)){
+        echo "    <script type='application/javascript'>";
+        echo $custom_js;
+        $this->load->view('parts/post_template');
+        echo "\n    </script>\n";
     }
-    foreach ($js_src as $src) {
-        echo "    <script type=\"text/javascript\" src=\"$src\"></script>\n";
-    }
-    foreach ($meta as $html) {
-        echo "    $html\n";
-    }
-    echo "    <script type='application/javascript'>";
-
-    echo $custom_js;
-    $this->load->view('parts/post_template');
-    echo "\n    </script>\n";
     unset($src);
     unset($html);
     ?>
