@@ -38,81 +38,57 @@ pwell.AjaxForm = function (FormSelector, action, captchaId, callback) {
         event.preventDefault();
         var formData = self.ElementForm.serializeArray();
         var data = {};
+        let success = function (msg, data) {
+            if (self.status == 2) { //is open
+                clearTimeout(self.TimeoutId);
+                self.hideResponse(function () {
+                    self.showResponse("success", msg);
+                });
+            } else {
+                self.showResponse("success", msg);
+            }
+            self.callback({status: "success", event: data});
+            if (typeof captchas !== 'undefined' && typeof grecaptcha !== 'undefined' && self.useCaptcha)
+                grecaptcha.reset(captchaId);
+            self.TimeoutId = setTimeout(function () {
+                self.hideResponse();
+            }, 10000);
+        };
+        let error = function (msg, data) {
+            if (self.status == 2) { //is open
+                clearTimeout(self.TimeoutId);
+                self.hideResponse(function () {
+                    self.showResponse("failure", msg);
+                });
+            } else {
+                self.showResponse("failure", msg);
+            }
+            self.TimeoutId = setTimeout(function () {
+                self.hideResponse();
+            }, 10000);
+            if (typeof captchas !== 'undefined' && typeof grecaptcha !== 'undefined' && self.useCaptcha)
+                grecaptcha.reset(captchaId);
+            self.TimeoutId = setTimeout(function () {
+                self.hideResponse();
+            }, 10000);
+        };
+
         for(var i in formData)
             data[formData[i].name] = formData[i].value;
-        if(this.action == "login"){
-        pwell.rest.login(data.username, data.password, data["g-recaptcha-response"], {
-            error: function (msg, data) {
-                if (self.status == 2) { //is open
-                    clearTimeout(self.TimeoutId);
-                    self.hideResponse(function () {
-                        self.showResponse("failure", msg);
-                    });
-                } else {
-                    self.showResponse("failure", msg);
-                }
-                self.TimeoutId = setTimeout(function () {
-                    self.hideResponse();
-                }, 10000);
-                if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
-                    grecaptcha.reset(captchaId);
-                self.TimeoutId = setTimeout(function () {
-                    self.hideResponse();
-                }, 10000);
-            },
-            success: function (msg, data) {
-                if (self.status == 2) { //is open
-                    clearTimeout(self.TimeoutId);
-                    self.hideResponse(function () {
-                        self.showResponse("success", msg);
-                    });
-                } else {
-                    self.showResponse("success", msg);
-                }
-                self.callback({status: "success", event: data});
-                if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
-                    grecaptcha.reset(captchaId);
-                self.TimeoutId = setTimeout(function () {
-                    self.hideResponse();
-                }, 10000);
-            }
-        });
-        } else {
+        if(self.action === "login"){
+            pwell.rest.login(data.username, data.password, data["g-recaptcha-response"], {
+                error: error,
+                success: success
+            });
+        } else if(self.action === "register"){
             pwell.rest.register(data.username, data.password, data.email, data["g-recaptcha-response"], {
-                error: function (msg) {
-                    if (self.status == 2) { //is open
-                        clearTimeout(self.TimeoutId);
-                        self.hideResponse(function () {
-                            self.showResponse("failure", msg);
-                        });
-                    } else {
-                        self.showResponse("failure", msg);
-                    }
-                    self.TimeoutId = setTimeout(function () {
-                        self.hideResponse();
-                    }, 10000);
-                    if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
-                        grecaptcha.reset(captchaId);
-                    self.TimeoutId = setTimeout(function () {
-                        self.hideResponse();
-                    }, 10000);
-                },
-                success: function (msg, data) {
-                    if (self.status == 2) { //is open
-                        clearTimeout(self.TimeoutId);
-                        self.hideResponse(function () {
-                            self.showResponse("success", msg);
-                        });
-                    } else {
-                        self.showResponse("success", msg);
-                    }
-                    self.callback({status: "success", event: data});
-                    if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
-                        grecaptcha.reset(captchaId);
-                    self.TimeoutId = setTimeout(function () {
-                        self.hideResponse();
-                    }, 10000);
-                }
+                error: error,
+                success: success
+            });
+        } else if(self.action === "info"){
+            pwell.rest.getUserInfo(data.username, data.password, data.email, data["g-recaptcha-response"], {
+                error: error,
+                success: success
             });
         }
     });
@@ -185,7 +161,7 @@ pwell.ModalForm.prototype.constructor = pwell.ModalForm;
 
 var captchas = [];
 $(document).ready(function () {
-    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "/REST/user/login", function (response) {
+    var AjaxLogin = new pwell.ModalForm("#login", "#LoginForm", "login", function (response) {
         if (response.status === "success") {
             if (typeof pwell.controller !== "undefined" && typeof pwell.controller.updateLoginInfo !== "undefined") {
                 pwell.controller.updateLoginInfo();
@@ -193,8 +169,8 @@ $(document).ready(function () {
             }
         }
     }, true);
-    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "/REST/user/register", null, true);
-    var AjaxManageUser = new pwell.ModalForm("#manageUser", "#ManageUserForm", "/REST/user/info", function (response) {
+    var AjaxRegister = new pwell.ModalForm("#register", "#RegisterForm", "register", null, true);
+    var AjaxManageUser = new pwell.ModalForm("#manageUser", "#ManageUserForm", "info", function (response) {
         function template(name, value) {
             return "<div class='row'> <div class='col-xs-2' style='text-transform: capitalize'>" + name + "</div><div class='col-xs-10'>" + value + "</div></div>";
         }
