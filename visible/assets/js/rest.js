@@ -22,7 +22,7 @@ pwell.rest.login = function (username, password, captcha, settings) {
         settings.success = function () {};
     }
     this.defaultRequest({
-        url: "REST/user/login",
+        url: "Rest/user/login",
         method: "POST",
         data: {username: username, password: password, "g-recaptcha-response": captcha},
         success: settings.success,
@@ -42,7 +42,7 @@ pwell.rest.logout = function (settings) {
         settings.success = function () {};
     }
     this.defaultRequest({
-        url: "/REST/user/logout",
+        url: "/Rest/user/logout",
         method: "GET",
         success: settings.success,
         error: settings.error
@@ -63,7 +63,7 @@ pwell.rest.register = function (username, password, email, captcha, settings) {
         settings.success = function () {};
     }
     this.defaultRequest({
-        url: "REST/user/register",
+        url: "Rest/user/register",
         method: "POST",
         data: {username: username, password: password, email: email, "g-recaptcha-response": captcha},
         success: settings.success,
@@ -77,7 +77,7 @@ pwell.rest.getPost = function (id,settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/posts/" + id, method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/posts/" + id, method: "GET", success: settings.success, error: settings.error})
 };
 
 pwell.rest.getPostIds = function (settings) {
@@ -86,7 +86,7 @@ pwell.rest.getPostIds = function (settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/posts", method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/posts", method: "GET", success: settings.success, error: settings.error})
 };
 
 pwell.rest.createPost = function (title, text, settings) {
@@ -99,7 +99,7 @@ pwell.rest.createPost = function (title, text, settings) {
             title:title,
             text:text
         }));
-    this.defaultRequest({url: "REST/posts/", method: "PUT", data:data, success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/posts/", method: "PUT", data:data, success: settings.success, error: settings.error})
 };
 pwell.rest.editPost = function (id, title, text, settings) {
     if(settings == null) {
@@ -111,7 +111,7 @@ pwell.rest.editPost = function (id, title, text, settings) {
             title:title,
             text:text
         }));
-    this.defaultRequest({url: "REST/posts/" + id,data:data, method: "POST", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/posts/" + id,data:data, method: "POST", success: settings.success, error: settings.error})
 };
 pwell.rest.deletePost = function (id,settings) {
     if(settings == null) {
@@ -119,7 +119,7 @@ pwell.rest.deletePost = function (id,settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/posts/" + id, method: "DELETE", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/posts/" + id, method: "DELETE", success: settings.success, error: settings.error})
 };
 pwell.rest.getUserInfo = function (settings) {
     if(settings == null) {
@@ -127,7 +127,7 @@ pwell.rest.getUserInfo = function (settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/user/info", method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
 };
 /**
  *
@@ -141,7 +141,7 @@ pwell.rest.getSelfInfo = function (settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/user/info", method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
 };
 pwell.rest.autoCompleteUser = function (username, settings) {
     if(settings == null) {
@@ -149,7 +149,7 @@ pwell.rest.autoCompleteUser = function (username, settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/user/info", method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
 };
 pwell.rest.getUserPerms = function (username,settings) {
     if(settings == null) {
@@ -157,7 +157,7 @@ pwell.rest.getUserPerms = function (username,settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/user/info", method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
 };
 pwell.rest.setUserPerms = function (username, perms,settings) {
     if(settings == null) {
@@ -165,7 +165,7 @@ pwell.rest.setUserPerms = function (username, perms,settings) {
         settings.error = function () {};
         settings.success = function () {};
     }
-    this.defaultRequest({url: "REST/user/info", method: "GET", success: settings.success, error: settings.error})
+    this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
 };
 pwell.rest.defaultRequest = function (settings) {
     if(settings == null) {
