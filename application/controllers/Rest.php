@@ -86,7 +86,7 @@ class Rest extends CI_Controller
                         } else {
                             $this->captcha->validate($captcha);
                             if ($this->captcha->isValid()) {
-                                $user = $this->users->getUserByLogin($_POST['username'], $_POST['password']);
+                                $user = $this->users->getUserByLogin($username, $password);
 
                                 if ($user !== NULL) {
                                     $_SESSION['user'] = $user;
@@ -111,11 +111,11 @@ class Rest extends CI_Controller
                         } else {
                             $this->captcha->validate($captcha);
                             if ($this->captcha->isValid()) {
-                                $user = $this->users->addUser($_POST['username'], $_POST['password'], $_POST['email']);
+                                $user = $this->users->addUser($username, $password, $email);
                                 if ($user === NULL) {
                                     $response = "";
                                     foreach ($this->users->input_errors as $error) {
-                                        $response += $error;
+                                        $response .= $error;
                                     }
                                     (new Response("failure", $response))->output(Response::HTTP_BAD_REQUEST);
                                 } else {

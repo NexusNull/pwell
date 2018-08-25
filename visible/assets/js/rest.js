@@ -194,7 +194,7 @@ pwell.rest.defaultRequest = function (settings) {
             var message = reason;
             var data = null;
             if (response.responseJSON) {
-                if (typeof response.responseJSON.msg === "string" && response.responseJSON.msg > 0)
+                if (typeof response.responseJSON.msg === "string" && response.responseJSON.msg.length > 0)
                     message = response.responseJSON.msg;
                 if (typeof response.responseJSON.data === "object")
                     data = response.responseJSON.data

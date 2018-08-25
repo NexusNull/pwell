@@ -11,15 +11,15 @@ if (typeof pwell == "undefined")
 /**
  * @namespace pwell
  * @param FormSelector
- * @param url
+ * @param action
  * @constructor
  */
-pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
+pwell.AjaxForm = function (FormSelector, action, captchaId, callback) {
     var self = this;
     this.callback = callback ? callback : function () {
     };
     this.FormSelector = FormSelector;
-    this.url = url;
+    this.action = action;
     this.status = 0; // 0:closed, 1:opening, 2:open, 3:closing
 
     this.TimeoutId = 0;
@@ -36,16 +36,26 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
 
     this.ElementForm.submit(function (event) {
         event.preventDefault();
-        //if (self.status != 1 && self.status != 3);
         var formData = self.ElementForm.serializeArray();
         var data = {};
         for(var i in formData)
             data[formData[i].name] = formData[i].value;
-        //console.log(data)
-
+        if(this.action == "login"){
         pwell.rest.login(data.username, data.password, data["g-recaptcha-response"], {
-            error: function (msg,data) {
-                self.showResponse("failure", msg);
+            error: function (msg, data) {
+                if (self.status == 2) { //is open
+                    clearTimeout(self.TimeoutId);
+                    self.hideResponse(function () {
+                        self.showResponse("failure", msg);
+                    });
+                } else {
+                    self.showResponse("failure", msg);
+                }
+                self.TimeoutId = setTimeout(function () {
+                    self.hideResponse();
+                }, 10000);
+                if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
+                    grecaptcha.reset(captchaId);
                 self.TimeoutId = setTimeout(function () {
                     self.hideResponse();
                 }, 10000);
@@ -55,7 +65,6 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
                     clearTimeout(self.TimeoutId);
                     self.hideResponse(function () {
                         self.showResponse("success", msg);
-
                     });
                 } else {
                     self.showResponse("success", msg);
@@ -68,6 +77,44 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
                 }, 10000);
             }
         });
+        } else {
+            pwell.rest.register(data.username, data.password, data.email, data["g-recaptcha-response"], {
+                error: function (msg) {
+                    if (self.status == 2) { //is open
+                        clearTimeout(self.TimeoutId);
+                        self.hideResponse(function () {
+                            self.showResponse("failure", msg);
+                        });
+                    } else {
+                        self.showResponse("failure", msg);
+                    }
+                    self.TimeoutId = setTimeout(function () {
+                        self.hideResponse();
+                    }, 10000);
+                    if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
+                        grecaptcha.reset(captchaId);
+                    self.TimeoutId = setTimeout(function () {
+                        self.hideResponse();
+                    }, 10000);
+                },
+                success: function (msg, data) {
+                    if (self.status == 2) { //is open
+                        clearTimeout(self.TimeoutId);
+                        self.hideResponse(function () {
+                            self.showResponse("success", msg);
+                        });
+                    } else {
+                        self.showResponse("success", msg);
+                    }
+                    self.callback({status: "success", event: data});
+                    if (typeof captchas != 'undefined' && typeof grecaptcha != 'undefined' && self.useCaptcha)
+                        grecaptcha.reset(captchaId);
+                    self.TimeoutId = setTimeout(function () {
+                        self.hideResponse();
+                    }, 10000);
+                }
+            });
+        }
     });
 };
 
@@ -152,7 +199,6 @@ $(document).ready(function () {
             return "<div class='row'> <div class='col-xs-2' style='text-transform: capitalize'>" + name + "</div><div class='col-xs-10'>" + value + "</div></div>";
         }
 
-        //console.log(response);
         if (response.status === "success") {
             var event = response.event;
             if (event.status == "success") {
