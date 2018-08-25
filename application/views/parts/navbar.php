@@ -71,10 +71,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </ul>
             </div>
             <div class="user-info">
-                <ul class="nav navbar-nav navbar-right" style="display:none">
+                <ul class="nav navbar-nav navbar-right" >
                     <li><a href="#" onclick="pwell.controller.logout()">Logout</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right" style="display:none">
+                <ul class="nav navbar-nav navbar-right" >
                     <li><a href="#" onclick="pwell.controller.moveTo()">Hello <span class="name-field"></span></a></li>
                 </ul>
             </div>

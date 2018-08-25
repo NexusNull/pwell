@@ -2,7 +2,6 @@
  * http://jqueryui.com
  * Includes: effect.js
  * Copyright jQuery Foundation and other contributors; Licensed MIT */
-
 (function (factory) {
     if (typeof define === "function" && define.amd) {
 

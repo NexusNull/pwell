@@ -1,7 +1,8 @@
+goog.provide("pwell.modalController");
+
 /**
  * Created by Nexus on 11.12.2017.
  */
-
 if (typeof pwell === "undefined")
     pwell = {};
 

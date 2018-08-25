@@ -1,6 +1,12 @@
 /**
  * Created by patric on 7/1/16.
  */
+goog.provide("pwell.AjaxForm");
+goog.provide("pwell.ModalForm");
+
+
+if (typeof pwell == "undefined")
+    pwell = {};
 
 /**
  * @namespace pwell
@@ -8,10 +14,6 @@
  * @param url
  * @constructor
  */
-
-if (typeof pwell == "undefined")
-    pwell = {};
-
 pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
     var self = this;
     this.callback = callback ? callback : function () {
@@ -34,7 +36,7 @@ pwell.AjaxForm = function (FormSelector, url, captchaId, callback) {
 
     this.ElementForm.submit(function (event) {
         event.preventDefault();
-        if (self.status != 1 && self.status != 3);
+        //if (self.status != 1 && self.status != 3);
         var formData = self.ElementForm.serializeArray();
         var data = {};
         for(var i in formData)

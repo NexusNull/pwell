@@ -67,8 +67,6 @@ body
   height: 3px
   background-color: $color-primary-3
 
-
-
 .content
   background-color: $shade-white-5
   padding: 15px
@@ -76,10 +74,10 @@ body
   //box-shadow: 0 0 11px -8px #000
   //-webkit-box-shadow: 0 0 11px -5px #000
 
-.content:last-child
+.content:last-child div
   margin-bottom: 15px
 
-.content:first-child
+.content:nth-of-type(1)
   margin-top: 0
 
 .content-navigation
@@ -129,6 +127,9 @@ body
   white-space: pre-wrap
   color: #000
   width: 100%
+
+.em
+  border: #0A0110 solid 1px
 
 .editable
   border: 1px solid $color-primary-0
@@ -192,6 +193,7 @@ body
         color: white
         padding: 2px
         background-color: $color-primary-4
+
 .modal-body
   .divider
     height: 1px

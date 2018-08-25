@@ -22,6 +22,8 @@ class Posts_model extends CI_Model
 
         $sqlPost = "SELECT * FROM posts WHERE posts.id = ? LIMIT 1";
         $sqlKeywords = "SELECT keyword FROM mapPostKeyword LEFT JOIN keywords ON mapPostKeyword.keywordId = keywords.id WHERE mapPostKeyword.postId = ?";
+        $sqlHeadings = "SELECT name FROM headings WHERE headings.postId = ? ORDER BY position";
+
         $queryPost = $this->db->query($sqlPost, array($id));
 
         if ($queryPost->num_rows() > 0) {
@@ -33,6 +35,16 @@ class Posts_model extends CI_Model
                     $keywords[] = $keyword['keyword'];
                 }
             }
+
+            $queryHeadings = $this->db->query($sqlHeadings, array($id));
+            $headings = [];
+            if ($queryHeadings->num_rows() > 0) {
+                foreach ($queryHeadings->result_array() as $headingRow) {
+                    array_push($headings,$headingRow['name']);
+                }
+            }
+
+
             $post = new Post(
                 $row['id'],
                 $row['title'],
@@ -40,6 +52,7 @@ class Posts_model extends CI_Model
                 $row['date_written'],
                 $row['date_changed'],
                 $row['author'],
+                $headings,
                 $keywords,
                 $row['text']);
         }
@@ -100,6 +113,7 @@ class Posts_model extends CI_Model
                     $row['date_written'],
                     $row['date_changed'],
                     $row['author'],
+                    $row['headings'],
                     $keywords,
                     $row['text']);
             }
@@ -109,6 +123,40 @@ class Posts_model extends CI_Model
 
     public function updatePost($id = NULL, $text = "", $title = "", $thumbnail = "none", $keywords = [])
     {
+
+        $sqlDelete = "DELETE FROM `pwell`.`headings` WHERE `headings`.`postId` = ?;";
+        if ($id != NULL) {
+            $this->db->query($sqlDelete, array($id));
+        }
+
+
+        $doc = new DOMDocument();
+        libxml_use_internal_errors(1);
+        $doc->loadHTML($text);
+        $headings = $doc->getElementsByTagName("h2");
+        $i =0;
+        $sqlInsert = "INSERT INTO `pwell`.`headings`(`postId`, `position`, `name`) VALUES ";
+        $value = [];
+
+        foreach($headings as $key => $heading){
+            $sqlInsert .= "(?,?,?),";
+            $heading->setAttribute("id", "p".$id."_".$i);
+            array_push($value, $id, $i, $heading->nodeValue);
+            $i++;
+        }
+
+        if(count($value) > 0) {
+            $sqlInsert = rtrim($sqlInsert, ",");
+            $this->db->query($sqlInsert, $value);
+            $text = str_replace( array('<html>', '</html>', '<body>', '</body>'), array('', '', '', ''), $doc->saveHTML());
+            $text =  preg_replace('/^<!DOCTYPE.+?>/', '', $text);
+            $text = preg_replace('/(\r\n|\n|\r)/', "", $text);
+        }
+
+        //Title
+        $title = ucfirst($title);
+
+
         $date = date("Y-m-d");
         $sql = "UPDATE posts SET title=?,text=?,thumbnail=?, date_changed=? WHERE id = ?";
         if ($id != NULL) {

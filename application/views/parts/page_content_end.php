@@ -11,17 +11,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="col-md-4 visible-lg-block visible-md-block">
     <div class="content-navigation">
         <div class="post-navigator">
-            <button class="btn">
+            <button class="btn post-navigator-prev">
                 <i class="fa fa-angle-left"></i>
             </button>
-            <div class="post-title">
-
+            <div class="post-navigator-title">
             </div>
-            <button class="btn">
+            <button class="btn post-navigator-prev">
                 <i class="fa fa-angle-right"></i>
             </button>
         </div>
-        <div class="post-index">
+        <div class="post-navigator-index">
 
         </div>
         <div class="social-share">

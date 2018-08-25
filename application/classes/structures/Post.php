@@ -37,11 +37,15 @@ class Post
      */
     private $keywords;
     /**
+     * @var array headings
+     */
+    private $headings;
+    /**
      * @var string text
      */
     private $text;
 
-    public function __construct($id = NULL, $title = NULL, $thumbnail = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $keywords = array(), $text = NULL)
+    public function __construct($id = NULL, $title = NULL, $thumbnail = NULL, $date_written = NULL, $date_changed = NULL, $author = NULL, $headings = array(),  $keywords = array(), $text = NULL)
     {
         $this->id = $id;
         $this->title = $title;
@@ -50,7 +54,7 @@ class Post
         $this->author = $author;
         $this->date_written = $date_written;
         $this->date_changed = $date_changed;
-
+        $this->headings = $headings;
         $this->keywords = $keywords;
     }
 
@@ -63,7 +67,7 @@ class Post
             'author' =>  $this->author,
             'date_written' =>  $this->date_written,
             'date_changed' =>  $this->date_changed,
-
+            'headings' => $this->headings,
             'keywords' =>  $this->keywords,
         );
     }
@@ -122,6 +126,14 @@ class Post
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeadings()
+    {
+        return $this->headings;
     }
 
     /**

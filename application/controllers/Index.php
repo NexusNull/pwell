@@ -32,16 +32,11 @@ class Index extends CI_Controller
         );
 
         $headerData['js_src'] = array(
-            '/assets/js/jquery-2.2.0.js',
-            '/assets/js/jquery-ui.js',
-            '/assets/js/jquery.sticky.js',
-            '/assets/js/bootstrap.min.js',
-            '/assets/js/form.js',
-            '/assets/js/postContainer.js',
-            '/assets/js/controller.js',
-            '/assets/js/post.js',
-            '/assets/js/modalController.js',
-            '/assets/js/rest.js',
+            '/assets/output/jquery-2.2.0.js',
+            '/assets/output/jquery-ui.js',
+            '/assets/output/jquery.sticky.js',
+            '/assets/output/bootstrap.min.js',
+            '/assets/output/main.min.js',
             '/assets/quill/quill.min.js',
             '/assets/fonts',
             //'/assets/quill/quill.core.js',

@@ -8,6 +8,7 @@ var targetTime = 32;
 var elements = [];
 $(document).ready(function () {
     canvas = document.getElementById("bubbles");
+    if(canvas){
     canvas.width = 345;
     canvas.height = 345;
     var elementCount = 100;
@@ -19,6 +20,7 @@ $(document).ready(function () {
         }
         setInterval(run, targetTime);
     }, 10);
+    }
 });
 
 document.addEventListener("mousemove", function () {

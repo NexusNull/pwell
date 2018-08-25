@@ -1,7 +1,7 @@
 /**
  * Created by patric on 12/24/16.
  */
-
+goog.provide("pwell.post")
 if (typeof pwell == "undefined")
     pwell = {};
 

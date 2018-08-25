@@ -174,8 +174,8 @@ class Rest extends CI_Controller
 
                         $post = $this->posts->createPost();
                         $postId = $post->getId();
+                        $postTitle = (isset($data->title) ? strip_tags($data->title) : NULL);
                         $postText = (isset($data->text) ? $data->text : NULL);
-                        $postTitle = (isset($data->title) ? $data->title : NULL);
 
                         $this->posts->updatePost($postId, $postText, $postTitle);
 
@@ -217,10 +217,9 @@ class Rest extends CI_Controller
                                     (new Response("failure", "Missing title field", ""))->output(Response::HTTP_BAD_REQUEST);
                                 }
 
-
+                                $postTitle = (isset($data->title) ? strip_tags($data->title) : NULL);
                                 $postText = (isset($data->text) ? $data->text : NULL);
-                                $postTitle = (isset($data->title) ? $data->title : NULL);
-
+                                //TODO sanitize your inputs
                                 $this->posts->updatePost($id, $postText, $postTitle);
 
                                 (new Response("success", "", $post))->output(Response::HTTP_OK);

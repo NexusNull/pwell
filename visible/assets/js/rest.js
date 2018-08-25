@@ -1,7 +1,7 @@
 /**
  * Created by Nexus on 03.05.2018.
  */
-
+goog.provide("pwell.rest");
 if (typeof pwell == "undefined")
     pwell = {};
 pwell.rest = {};

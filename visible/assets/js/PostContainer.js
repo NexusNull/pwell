@@ -2,7 +2,7 @@
  * Created by patric on 12/08/18.
  */
 
-
+goog.provide("pwell.postContainer");
 if (typeof pwell == "undefined")
     pwell = {};
 
@@ -12,9 +12,30 @@ pwell.PostContainer = function () {
     this.element = $(".post-container")[0];
     this.postIds = [];
     this.position = 0;
+    this.top = null;
+    this.contentNavigator = new pwell.ContentNavigator();
     setTimeout(function () {
         self.updatePosts();
     }, 5000);
+
+    setInterval(function(){
+        var top = null;
+        for(var key in self.postIds){
+            let val = self.postIds[key];
+            if(self.posts[val]){
+                if(!top)
+                    top = self.posts[val];
+                if(self.posts[val].element.getBoundingClientRect().y < window.innerHeight*0.60)
+                    top = self.posts[val];
+                self.posts[val].element.classList.remove("em")
+            }
+
+        }
+        if(top !== self.top)
+            self.contentNavigator.update(top.data);
+        top.element.classList.add("em");
+        self.top = top;
+    },1000)
 };
 
 pwell.PostContainer.prototype.updatePosts = function(){
@@ -65,8 +86,6 @@ pwell.PostContainer.prototype.insert = function (post) {
     let id = post.data.id;
     let followingPost = null;
     if(id === -1){
-        let followingPost = this.posts[this.postIds[0]];
-
         this.element.prepend(post.getHTMLElement());
     }else {
         for (let i = this.postIds.indexOf(+id) + 1; i < this.postIds.length; i++) {

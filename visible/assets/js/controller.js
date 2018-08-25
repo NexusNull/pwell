@@ -1,14 +1,16 @@
 /**
  * Created by patric on 11/8/16.
  */
+goog.require("pwell.rest")
+goog.provide("pwell.controller");
+
+if (typeof pwell == "undefined")
+    pwell = {};
 
 /**
  * @namespace pwell
  * @constructor
  */
-if (typeof pwell == "undefined")
-    pwell = {};
-
 pwell.Controller = function (){
     this.loggedin = false;
     this.permissions = {};
