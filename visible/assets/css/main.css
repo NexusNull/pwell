@@ -2590,6 +2590,19 @@ label {
   line-height: 35px;
   font-size: 17px; }
 
+.social-button {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  height: 25px; }
+
+.social-button > img {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px; }
+
+.social-button > span {
+  vertical-align: middle; }
+
 .navbar-inverse .navbar-nav > li > a {
   color: #fcfcfc; }
 
