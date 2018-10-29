@@ -1,6 +1,9 @@
 /**
  * Created by patric on 11/8/16.
  */
+goog.require("pwell.post")
+goog.require("pwell.postContainer")
+goog.require("pwell.modalController")
 goog.require("pwell.rest")
 goog.provide("pwell.controller");
 

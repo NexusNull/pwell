@@ -28,6 +28,7 @@ class Index extends CI_Controller
         $headerData['style_src'] = array(
             '/assets/css/bootstrap.min.css',
             '/assets/quill/quill.snow.css',
+            '/assets/css/katex.min.css',
             '/assets/css/main.css',
         );
 
@@ -36,6 +37,7 @@ class Index extends CI_Controller
             '/assets/output/jquery-ui.js',
             '/assets/output/jquery.sticky.js',
             '/assets/output/bootstrap.min.js',
+            '/assets/output/katex.min.js',
             '/assets/output/main.min.js',
             '/assets/quill/quill.min.js',
             '/assets/fonts',
@@ -54,6 +56,7 @@ class Index extends CI_Controller
         $this->load->view('parts/header', $headerData);
         $this->load->view('parts/navbar');
         $this->load->view('parts/page_content_start');
+        $this->load->view('parts/page_accept_cookies');
         $this->load->view('parts/no_js');
         $this->load->view('parts/page_content_end');
         $this->load->view('parts/register_modal');
@@ -61,6 +64,7 @@ class Index extends CI_Controller
         $this->load->view('parts/manage_user_modal');
         $this->load->view('parts/permission_modal');
         $this->load->view('parts/delete_modal');
+        $this->load->view('parts/image_manager_modal');
         $this->load->view('parts/footer');
     }
 

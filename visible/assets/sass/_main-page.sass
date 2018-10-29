@@ -1,9 +1,19 @@
 @import _palette2.sass
 @import _shades
 $container-background: #ededed
+html
+  height: 100%
 
 body
   background-color: $color-background
+  height: 100%
+
+.page-content
+  height: 100%
+
+
+.alert-dismissable .close, .alert-dismissible .close
+  right: 0
 
 @media (max-width: 480px)
   .container
@@ -74,9 +84,6 @@ body
   //box-shadow: 0 0 11px -8px #000
   //-webkit-box-shadow: 0 0 11px -5px #000
 
-.content:last-child div
-  margin-bottom: 15px
-
 .content:nth-of-type(1)
   margin-top: 0
 
@@ -120,14 +127,17 @@ body
     top: 10px
     left: 10px
   padding:
-    right: 50px
+    right: 25px
   position: relative
   text-align: justify
-  font-family: ​Times, serif
+  font-family: Times, serif
   white-space: pre-wrap
   color: #000
   width: 100%
-
+.post-text > p >img
+  width: 100%
+.post-text > img
+  width: 100%
 .em
   border: #0A0110 solid 1px
 

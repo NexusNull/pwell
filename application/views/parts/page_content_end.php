@@ -17,11 +17,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="post-navigator-title">
             </div>
             <button class="btn post-navigator-prev">
-
+                <i class="fa fa-angle-right"></i>
             </button>
         </div>
         <div class="post-navigator-index">
-            <i class="far fa-image"></i>
         </div>
         <div class="social-share">
             <a href="https://twitch.tv/nexusnul">

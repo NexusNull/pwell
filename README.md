@@ -5,5 +5,4 @@ This is a little website I develop for myself in my free time. I do not mind any
 ### Tools used
 
 * CodeIgniter Framework
-* justinrainbow/json-schema
   

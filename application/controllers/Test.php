@@ -13,12 +13,19 @@ class Test extends CI_Controller
         parent::__construct();
         $this->load->model("Permission_model", "perm");
         $this->load->model("Users_model", "user");
+        $this->load->model("Image_model", "image");
     }
 
-    public function index()
+    public function index($id = 0)
     {
         if (ENVIRONMENT == "production")
             return;
-        phpinfo();
+        (new Response("success", "", $this->image->getImagesById($id)))->output(Response::HTTP_OK);
+    }
+    public function search($name = "")
+    {
+        if (ENVIRONMENT == "production")
+            return;
+        (new Response("success", "", $this->image->getImagesByName($name)))->output(Response::HTTP_OK);
     }
 }

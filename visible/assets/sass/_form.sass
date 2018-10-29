@@ -20,16 +20,27 @@ input
 input[type=checkbox]
   margin: 4px
 
+input[type=file]
+  display: none
+
+
 input[type=text], input[type=password]
-  //padding: 3px
-  //margin: 3px
-  border-radius: 5px
+  border:
+    radius: 0px
+    bottom: 1px solid $shade-white-4
+    top: 0
+    left: 0
+    right: 0
   font-size: 16px
 
 label
   margin-top: 8px
   font-weight: 100
   line-height: 1.2
+label.btn
+  margin: 0
+  float: left
+
 
 .modal-body
   box-sizing: content-box

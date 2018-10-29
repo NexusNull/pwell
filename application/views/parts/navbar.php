@@ -20,13 +20,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a class="navbar-brand" href="#">
                 <img src="/assets/img/nexus.png"/>
             </a>
-
         </div>
-
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="https://github.com/Fansana">GitHub</a></li>
+                <li><a href="https://github.com/NexusNull">GitHub</a></li>
                 <li><a href="#">Contact</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Projects

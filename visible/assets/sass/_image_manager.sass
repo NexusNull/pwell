@@ -1,0 +1,101 @@
+@import _shades
+.big-button
+  width: 150px
+  height: 135px
+  display: inline-block
+  border: solid $shade-white-3
+    width: 1px 0 1px 1px
+  padding: 15px
+    left: 30px
+
+.big-button:nth-of-type(1)
+  border-radius: 4px 0 0 4px
+
+.big-button:last-child
+  border:
+    radius: 0 4px 4px 0
+    width: 1px 1px 1px 1px
+
+.image-menu-body
+  text-align: center
+
+.big-button > div
+  width: 100px
+  height: 100px
+
+  fill: $shade-white-2
+
+.ripple
+  background-position: center
+  transition: background 0.8s
+
+.ripple:hover
+  background: $shade-white-4 radial-gradient(circle, transparent 1%, $shade-white-4 1%) center/15000%
+
+.ripple:active
+  background-color: $shade-white-5
+  background-size: 100%
+  transition: background 0s
+
+.image-selector
+  border-right: 1px solid $shade-white-4
+  min-height: 400px
+  text-align: left
+
+.image-editor
+
+.image-card
+  font-size: 0
+  float: left
+  width: 33.33%
+  height: 120px
+  display: inline-block
+  text-align: center
+  padding: 1px
+
+.image-card > div :hover
+  background-color: $shade-white-4
+
+.image-card > div
+  cursor: pointer
+  border: 1px solid
+    color: #b7b7b7
+  background-color: $shade-white-4
+  height: 100%
+
+.image-card > div > img
+  display: inline-block
+  max-width: 100%
+  max-height: 100%
+  width: auto
+  height: auto
+
+.image-card > div > span
+  height: 50%
+  display: inline-block
+
+.image-card-image
+  height: 50px
+  width: 70px
+  margin: 1px
+
+.image-editor-preview > img
+  width: 100%
+
+.image-menu-body
+  background-color: #f9f9f9
+
+.image-editor-caption
+  width: 100%
+  height: 100%
+
+.image-editor-settings
+  text-align: left
+
+.font-bold
+  font-weight: bold
+  
+.image-search-bar-icon
+  position: absolute
+  top: 10px
+  right: 22px

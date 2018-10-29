@@ -28,6 +28,7 @@ class Rest extends CI_Controller
         $this->load->model("Captcha_model", "captcha");
         $this->load->model("Posts_model", "posts");
         $this->load->model("Permission_model", "perm");
+        $this->load->model("Image_model", "image");
     }
 
     public function index()
@@ -140,6 +141,61 @@ class Rest extends CI_Controller
     public function permissions($id)
     {
 
+    }
+
+    public function media($arg1){
+        switch ($this->input->server('REQUEST_METHOD')) {
+            case "POST":
+                //Used to create a resource
+                if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
+                    $user = $_SESSION["user"];
+                    $this->image->createImage($_FILES["file"], $user, "");
+                } else {
+                    (new Response("failure", "Action requires login"))->output(Response::HTTP_FORBIDDEN);
+                }
+                break;
+            case "DELETE":
+
+                break;
+            case "GET":
+                $results =$this->image->getImagesByName($arg1);
+                if($results !== NULL){
+                    (new Response("success", "", $results))->output(Response::HTTP_OK);
+                } else {
+                    (new Response("success", "", array()))->output(Response::HTTP_OK);
+                }
+                break;
+            default:
+                (new Response("failure", "Unknown request."))->output(Response::HTTP_BAD_REQUEST);
+                break;
+        }
+    }
+    public function getMedia($arg1){
+        switch ($this->input->server('REQUEST_METHOD')) {
+            case "POST":
+                //Used to create a resource
+                if (isset($_SESSION['user']) && $_SESSION['user'] !== NULL) {
+                    $user = $_SESSION["user"];
+                    $this->image->createImage($_FILES["file"], $user, "");
+                } else {
+                    (new Response("failure", "Action requires login"))->output(Response::HTTP_FORBIDDEN);
+                }
+                break;
+            case "DELETE":
+
+                break;
+            case "GET":
+                $results = $this->image->getImagesById($arg1);
+                if($results !== NULL){
+                    (new Response("success", "", $results))->output(Response::HTTP_OK);
+                } else {
+                    (new Response("success", "Name too long"))->output(Response::HTTP_BAD_REQUEST);
+                }
+                break;
+            default:
+                (new Response("failure", "Unknown request."))->output(Response::HTTP_BAD_REQUEST);
+                break;
+        }
     }
 
     public function posts($id = NULL)

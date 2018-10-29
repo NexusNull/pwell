@@ -159,13 +159,55 @@ pwell.rest.getUserPerms = function (username,settings) {
     }
     this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
 };
-pwell.rest.setUserPerms = function (username, perms,settings) {
+pwell.rest.setUserPerms = function (username, perms, settings) {
     if(settings == null) {
         settings = {};
         settings.error = function () {};
         settings.success = function () {};
     }
     this.defaultRequest({url: "Rest/user/info", method: "GET", success: settings.success, error: settings.error})
+};
+pwell.rest.getImageByName = function(name, settings){
+    if(settings == null) {
+        settings = {};
+        settings.error = function () {};
+        settings.success = function () {};
+    }
+    this.defaultRequest({url: "Rest/media/" + encodeURIComponent(name), method: "GET", success: settings.success, error: settings.error})
+};
+pwell.rest.getImageById = function(id, settings){
+    if(settings == null) {
+        settings = {};
+        settings.error = function () {};
+        settings.success = function () {};
+    }
+    this.defaultRequest({url: "Rest/getmedia/" + encodeURIComponent(id), method: "GET", success: settings.success, error: settings.error})
+};
+pwell.rest.uploadImage = function(file, caption, settings){
+    if(settings == null) {
+        settings = {};
+        settings.error = function () {};
+        settings.success = function () {};
+    }
+    var xmlHttpRequest = new XMLHttpRequest();
+
+    let formData = new FormData();
+    formData.set("file", file);
+    formData.set("caption", caption);
+
+    xmlHttpRequest.onreadystatechange  = function(event){
+        if(xmlHttpRequest.readyState === XMLHttpRequest.DONE){
+            setTimeout(function(){
+                if(xmlHttpRequest.status === 200){
+                    settings.success();
+                } else {
+                    settings.error();
+                }
+            },200);
+        }
+    };
+    xmlHttpRequest.open('POST', "./rest/media", true);
+    xmlHttpRequest.send(formData);
 };
 pwell.rest.defaultRequest = function (settings) {
     if(settings == null) {
@@ -179,6 +221,7 @@ pwell.rest.defaultRequest = function (settings) {
         dataType: "json",
         data: settings.data,
         success: function (response) {
+            console.log(response)
             var data = null;
             var message = "Operation successful";
             if (response) {

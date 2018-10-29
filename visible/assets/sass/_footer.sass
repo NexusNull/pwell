@@ -1,0 +1,50 @@
+@import _palette2.sass
+@import shades.sass
+
+
+
+footer
+  padding:
+    top: 15px
+    bottom: 15px
+    right: 80px
+    left: 80px
+  color: $shade-white-4
+  background-color: $color-primary-4
+  left: 0
+  bottom: 0
+  width: 100%
+  overflow: hidden
+  text-align: center
+
+footer a
+  color: $shade-white-4
+
+footer a:hover
+  color: $shade-white-5
+
+.footer-content
+  display: inline-block
+  text-align: left
+
+.footer-grid
+  display: grid
+  grid-template-columns: 250px 250px 140px 180px
+  grid-template-rows: 50px 50px
+  grid-template-areas: " footer-credit1 footer-credit footer-legal footer-statistics" "footer-credit1 footer-credit footer-legal footer-copyright"
+  column-gap: 15px
+
+.footer-copyright
+  grid-area: footer-copyright
+
+.footer-statistics
+  grid-area: footer-statistics
+
+.footer-legal
+  grid-area: footer-legal
+
+.footer-credit
+  grid-area: footer-credit
+
+.footer-credit1
+  grid-area: footer-credit1
