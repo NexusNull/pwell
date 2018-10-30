@@ -3,3 +3,4 @@ CI helper/
 /application/config/config.php
 /application/config/database.php
 /application/config/reCaptcha.php
+/visible/assets/sass/.sass-cache
