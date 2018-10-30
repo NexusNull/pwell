@@ -33,22 +33,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li class="dropdown-menu-header">
                             <div class="header"><a href="#">Lua</a></div>
                         </li>
-                        <li><a href="#">MineCorp</a></li>
-                        <li><a href="#">NexGenUI</a></li>
+                        <li><a href="https://github.com/NexusNull/Twitch-vs-Factorio-mod">Twitch vs Factorio</a></li>
                         <li class="dropdown-menu-header">
                             <div class="header"><a href="#">Javascript</a></div>
                         </li>
-                        <li><a href="#">AL Documentation</a></li>
-                        <li><a href="#">AL Bot</a></li>
-                        <li><a href="#">Project255</a></li>
+                        <li><a href="https://github.com/NexusNull/adventureland">AL Documentation</a></li>
+                        <li><a href="https://github.com/NexusNull/ALBot">AL Bot</a></li>
+                        <li><a href="https://github.com/NexusNull/Project255">Project255</a></li>
                         <li class="dropdown-menu-header">
                             <div class="header"><a href="#">Web</a></div>
                         </li>
-                        <li><a href="#">pwell</a></li>
-                        <li class="dropdown-menu-header">
-                            <div class="header"><a href="#">Java</a></div>
-                        </li>
-                        <li><a href="#">TeamspeakFun</a></li>
+                        <li><a href="https://github.com/NexusNull/pwell">pwell</a></li>
                     </ul>
                 </li>
                 <li class="dropdown require_perm perm_create_post perm_grant" style="display:none">
