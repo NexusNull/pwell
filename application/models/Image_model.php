@@ -57,7 +57,7 @@ class Image_model extends CI_Model
                     $sql = "INSERT INTO images (name, size_x, size_y, file_type, file_size, file_name, uploader_id, upload_date) VALUES (?,?,?,?,?,?,?,?)";
                     $userId = ($user->getId())?$user->getId():0;
                     $name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file["name"]);
-                    $this->db->query($sql, array($name, $imageSize[0], $imageSize[1], $imageFileType, $file["size"], $file_name, $userId, $date, $caption));
+                    $this->db->query($sql, array($name, $imageSize[0], $imageSize[1], $imageFileType, $file["size"], $file_name, $userId, $date));
                     $this->cloneImage($file_name);
                 }
     }
