@@ -2509,6 +2509,9 @@ body {
         padding: 2px;
         background-color: #25509B; } }
 
+.policy {
+  text-align: right; }
+
 .modal-body .divider {
   height: 1px;
   width: 100%;

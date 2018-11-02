@@ -6,12 +6,16 @@ function getCookie(name) {
 }
 
 $(document).ready(function () {
-    var value = getCookie("policyAccepted");
+    var value = +getCookie("policyAccepted");
+    console.log(value);
     if(value){
         $("#policyAttention").remove();
     } else {
-        $("#policyAttention > .close")[0].addEventListener("click",function(){
-            document.cookie="policyAccepted = true";
+        $(".policy > .policyAccept")[0].addEventListener("click",function(){
+            document.cookie="policyAccepted = 1";
+        });
+        $(".policy > .policyDecline")[0].addEventListener("click",function(){
+            document.cookie="policyAccepted = 0";
         })
     }
 });
